@@ -1,0 +1,25 @@
+.index-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+.description-text {
+    font-size: 16px;
+    max-width: 80%;
+    word-wrap: break-word; 
+
+    margin-top: 1%;
+    padding-left: 1%;
+}
+
+.preview {
+    background-color: transparent;
+    margin-top: 25%;
+}
+
+.autors {
+    margin-top: auto;
+    padding-bottom: 1%;
+
+    text-align: center;
+}
