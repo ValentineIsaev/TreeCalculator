@@ -77,7 +77,7 @@ def max_wind_tipping(q: float,
     :param h: Высота дерева, м;
     :return: Максимальная скорость ветра, при которой случится опрокидывание, м/с.
     """
-    j = math_tools.tree_sole_moment(a, b)
+    j = math_tools.root_moment(a, b)
     alpha = math_tools.tipping_angle(q, l, b, c)
     f = math_tools.tipping_force(c, j, h, alpha, q, l)
     return math_tools.wind_speed(f, c_d, s)
@@ -123,7 +123,33 @@ def tree_stability(a: float,
     :return: bool - устойчиво ли дерево (True - устойчиво,
                                          False - неустойчиво)
     """
-    j = math_tools.tree_sole_moment(a, b)
+    j = math_tools.root_moment(a, b)
     alpha = math_tools.roll_angle(0, j, c, q, l, h)
 
     return abs(alpha) <= 5
+
+def soil_moment(root_moment: float,
+                c: float,
+                alpha: float) -> float:
+    """
+    root_moment (момент грунта) - удерживающий момент грунта
+    :param root_moment: Момент инерции корневой системы дерева, м**4;
+    :param c: Коэффициент жесткости грунта;
+    :param alpha: Угол крена дерева, радианы;
+    :return: Удерживающий момент грунта, H*м;
+    """
+
+    return root_moment * c * alpha
+
+def weight_moment(alpha: float,
+                  weight: float,
+                  center_gravity_weight) -> float:
+    """
+    weight_moment (момент веса) - момент веса дерева
+    :param alpha: Угол крена, радианы;
+    :param weight: Вес дерева, H;
+    :param center_gravity_weight: Высота центра тяжести дерева от основания дерева, м;
+    :return: Момент веса дерева, H*м;
+    """
+
+    return alpha * weight * center_gravity_weight

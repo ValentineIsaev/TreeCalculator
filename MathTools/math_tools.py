@@ -2,7 +2,7 @@ import math
 
 AIR = 1.25 # плотность воздуха, 1.25 кг/м^3
 
-def wind_power(v: float,
+def     wind_power(v: float,
        c_d: float,
        s: float) -> float:
     """
@@ -42,18 +42,18 @@ def tree_resistance_moment(d: float) -> float:
     """
     tree_resistance_moment (сопротивление дерева) - зависимость момента сопротивления дерева от его диаметра.
     :param d: Диаметр дерева на высоте груди взрослого человека, м;
-    :return: Момент сопротивления сечения дерева, Н*м.
+    :return: Момент сопротивления сечения дерева, м**3.
     """
 
     return math.pi * d**3 * (1/32)
 
-def tree_sole_moment(a: float,
-                     b: float) -> float:
+def root_moment(a: float,
+                b: float) -> float:
     """
-    tree_sole_moment (момент подошвы дерева) - момент инерции подошвы дерева.
+    tree_sole_moment (момент корней дерева) - Момент инерции площади подошвы корней.
     :param a: Длина подошвы корней, м;
     :param b: Ширина подошвы корней, м;
-    :return: Момент инерции подошвы дерева, H*м.
+    :return: Момент инерции подошвы дерева, м**4.
     """
     return a*b**3/12
 
@@ -81,7 +81,7 @@ def roll_angle(f: float,
     :param q: Вес дерева, H;
     :param l: Высота центра тяжести дерева от его основания, м;
     :param h: Высота дерева, м;
-    :return: угол крена, градусы;
+    :return: угол крена, радианы;
     """
     return f*h * (1/(c*j-q*l))
 
@@ -95,7 +95,7 @@ def separation_angle(q: float,
     :param c: Коэффициент жесткости грунта;
     :param a: Длина корневой подошвы дерева, м;
     :param b: Ширина корневой подошвы дерева, м;
-    :return: Угол отрыва подошвы, градусы.
+    :return: Угол отрыва подошвы, радианы.
     """
     return (2 * q) / (c * a**2 * b)
 
@@ -109,7 +109,7 @@ def tipping_angle(q: float,
     :param l: Высота центра тяжести от основания дерева, м;
     :param b: Ширина корневой системы дерева, м;
     :param c: Коэффициент жесткости грунта;
-    :return: Угол опрокидывания, градусы.
+    :return: Угол опрокидывания, радианы.
     """
     return (q/(18*l**2*b*c))**(1/3)
 
@@ -122,7 +122,7 @@ def wind_force_by_angle(angle: float,
                         h: float):
     """
     wind_force_by_angle (сила ветра из угла) - Зависимость силы ветра от угла крена
-    :param angle: Угол крена, градусы;
+    :param angle: Угол крена, радианы;
     :param c: Коэффициент жесткости грунта;
     :param a: Длина корневой системы дерева, м;
     :param b: Ширина корневой системы дерева, м;
@@ -131,7 +131,7 @@ def wind_force_by_angle(angle: float,
     :param h: Высота дерева, м;
     :return: Значение силы ветра, H;
     """
-    return angle * ((c*tree_sole_moment(a,b)-q*l)/h)
+    return angle * ((c * root_moment(a, b) - q * l) / h)
 
 def tipping_force(c: float,
                   j: float,
@@ -144,7 +144,7 @@ def tipping_force(c: float,
     :param c: Коэффициент жесткости грунта;
     :param j: Момент инерции подошвы дерева, H*м;
     :param h: Высота дерева, м;
-    :param alpha: Предельный угол опрокидывания дерева, градусы;
+    :param alpha: Предельный угол опрокидывания дерева, радианы;
     :param q: вес дерева, Н;
     :param l: высота центра тяжести от основания дерева, м;
     :return: сила ветра, при которой случится опрокидывание дерева, Н.

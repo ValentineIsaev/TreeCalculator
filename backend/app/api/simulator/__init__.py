@@ -1,0 +1,1 @@
+from .simulation import app as simulator_router
