@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Главная страница</title>
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/set-soil.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="/"><button class="head-button static-head-button">Главная</button></a>
+                <a href="/simulator"><button class="head-button push-head-button">Симуляция</button></a>
+                <a href="/calculator"><button class="head-button static-head-button">Калькулятор</button></a>
+                <a href="/editor"><button class="head-button static-head-button">Редактор</button></a>
+<!--                <a href="/helper"><button class="head-button static-head-button">Справочник</button></a>-->
+                <!-- <span class="lyceum">Престиж, 2026</span> -->
+            </div>
+        </header>
+        <div class="main-container">
+            <div class="set-soil-container">
+                <div class="name-container">
+                    <div class="window-name">Симуляция</div>
+                    <div class="window-subname">Установка почвы</div>
+                </div>
+                <div class="soils-container" id="SoilList">
+                </div>
+                <button class="back-button" onclick="window.location.href='/simulator'">Выход</button> 
+            </div>
+        </div>
+    </body>
+    <script src="../scripts/configs.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        const request = new ApiRequests(SERVER_URL, 'simulator');
+
+        const soilList = document.getElementById('SoilList');
+
+        async function initApp() {
+            const treeId = sessionStorage.getItem("TreeId");
+            let soils = {}
+            if (treeId != null) {
+                const response = await request.get('get-soils-by-tree', 'tree_id=' + treeId);
+                soils = await response.json();
+            }
+            else {
+                const response = await request.get('get-soils');
+                soils = await response.json();
+            }
+
+            for (const soilId in soils){
+                soilList.insertAdjacentHTML('beforeend', `
+                <button class="soil-button" onclick=setSoil(`+soilId+`,`+`'`+soils[soilId]['name']+`'`+`)>
+                    <div class="soil-button-container">
+                        <div class="soil-header"></div>
+                        <div class="soil-name">`+soils[soilId]['name']+`</div>
+                        <div class="soil-c">σ=`+soils[soilId]['c']+`</div>
+                    </div>
+                </button>
+            `);
+            }
+        }
+
+        initApp();
+
+        function setSoil(soilId, soilName) {
+            sessionStorage.setItem("SoilId", soilId);
+            sessionStorage.setItem("SoilName", soilName);
+            sessionStorage.setItem('IsUpdateSoil', 1);
+            window.location.href = "/simulator";
+        };
+    </script>
+</html>

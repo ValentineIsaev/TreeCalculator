@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Главная страница</title>
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/simulator.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="/"><button class="head-button static-head-button">Главная</button></a>
+                <a href="/simulator"><button class="head-button push-head-button">Симуляция</button></a>
+                <a href="/calculator"><button class="head-button static-head-button">Калькулятор</button></a>
+                <a href="/editor"><button class="head-button static-head-button">Редактор</button></a>
+<!--                <a href="helper.html"><button class="head-button static-head-button">Справочник</button></a>-->
+                <!-- <span class="lyceum">Престиж, 2026</span> -->
+            </div>
+        </header>
+        <div class="main-container">
+            <div class="simulator-container">
+                <!-- Левый столбик - Настройки -->
+                <div class="left-column">
+                    <!-- Название страницы -->
+                    <div class="name-container">
+                        <div class="window-name">Симулятор</div>
+                        <div class="window-subname">Главное окно</div>
+                    </div>  
+                    <div class="setting-container">
+                        <div class="button-container">
+                            <button class="setting-button">Установить настройки</button>
+                            <div class="drop-setting">
+                                <a href="/set_tree">Установить дерево</a>
+                                <a href="/set_soil">Установить почву</a>
+                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button class="setting-button">Симулятор</button>
+                            <div class="drop-setting">
+                                <a href="#" id="ResetButton" class="dropdown-link">Очистить</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="simulator-control-container">
+                        <!-- Слайдер скорости -->
+                        <div>
+                            <div class="slider-container">
+                                <div class="slider-label">Скорость ветра, М/С</div>
+                                <div class="wind-speed-value" id="windSpeed">0</div>
+                                <input type="range" class="wind-slider" id="windSlider" value="0" max="40">
+                            </div> 
+                        </div>
+                        <!-- Кнопки управления -->
+                        <div class="contor-buttons-container">
+                            <div class="control-button-field">
+                                Старт
+                                <button id="RunButton" class="button"><img src="../imgs/StartLogo.png" class="button-icon"></button>
+                                <div class="circle-on-off" id="CircleStart"></div>
+                            </div>
+                            <div class="control-button-field">
+                                Пауза
+                                <button class="button" id="PauseButton"><img src="../imgs/PauseLogo.png" class="button-icon"></button>
+                                <div class="circle-on-off" id="CirclePause"></div>
+                            </div>
+                            <div class="control-button-field">
+                                Стоп
+                                <button class="button" id="StopButton"><img src="../imgs/StopLogo.png" class="button-icon"></button>
+                                <div class="circle-on-off" id="CircleStop"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Консоль -->
+                    <div class="console-container">
+                        <ul class="console" id="Console">
+                            <li class="console-text">Симуляция, v==1.0 <br>Для начала работы установите дерево и почву используя "Установить настройки"</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Средний столбик - Окно симулятора -->
+                <div class="middle-container">
+                    <div class="simulation-values-container">
+                        <div class="simulation-value">Состояние дерева: <span id="TreeState"></span></div>
+                        <div class="simulation-value">Угол крена: <span id="WindowRollAngle">0</span>º</div>
+                        <div class="simulation-value">Сила ветра: <span id="WindowWindForce">0</span> H</div>
+                        <div class="simulation-value">Запас прочности: <span id="Saffety">0</span>%</div>
+                        <div class="simulation-value">Изгибающий момент: <span id="BendingMoment">0</span> Н•м</div>
+                    </div>
+                    <div class="work-container">
+                        <div class="vectors-container">
+                            <div class="vector-container">
+                                <div class="vector-value">U<sub>в</sub>=<span id="WindSpeedVector">0</span>м/c</div>
+                                <img src="../imgs/blueVector.png" class="vector">
+                            </div>
+                            <div class="vector-container">
+                                <div class="vector-value">F<sub>в</sub>=<span id='WindForceVector'></span>H</div>
+                                <img src="../imgs/blueVector.png" class="vector">
+                            </div>
+                        </div>
+                        <div class="tree-work-container">
+                            <div class="tree-container" id="TreeContainer" style="visibility: hidden;">
+                                <div class="angle-container" id="RollAngleContainer" style="visibility: hidden;">
+                                    <span class="angle-value"><span id='RollAngle'></span>º</span>
+                                    <div class="vertical-normal"></div>
+                                </div>
+                                <img id="TreeImg" src="../imgs/Tree1.png" class="tree">
+                                <div class="vector-container soil-moment-verctor" id="SoilVectorContainer" style="visibility: hidden;">
+                                    <div class="vector-value">F=<span id="SoilVector"></span></div>
+                                    <img src="../imgs/redVector.png" class="vector">
+                                </div>
+                                <div class="vector-container weight-moment-vector" style="visibility: hidden;" id="WeightVectorContainer">
+                                    <div class="vector-value">F= <span id="WeightMomentVector"></span></div>
+                                    <img src="../imgs/redVector.png" class="reverse-vector vector">
+                                </div>
+                                <div class="vector-container wind-moment-vector" style="visibility: hidden;" id="WindVectorContainer">
+                                    <div class="vector-value">F=<span id="WindMomentVector"></span></div>
+                                    <img src="../imgs/blueVector.png" class="vector reverse-vector">
+                                </div>
+                            </div>
+                            <img src="../imgs/Tree3.png" class="tree-crown" style="visibility: hidden;" id="CrownTree">
+                        </div>
+                    </div>
+                    <div class="ground-container">
+                        <div class="grass"></div>
+                        <div class="soil">
+                            <div class="name-soil" id="SoilName"></div>
+                            <div class="name-root">Корневая система: <span id="RootType"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Правый столбик - Данные и графики -->
+                    <div class="right-column">
+                        <div class="plot-container" id="PlotContainer">
+                            <canvas id="WindChart" class="plot"></canvas>
+                        </div>
+                        <div class="data-container">
+                            <div class="values-container">
+                                <div class="name-values">Результат</div>
+                                <div class="value">Напряженность в крайних волокнах волокнах ствола: <span id='TreeSress'>0</span> МПа</div>
+                                <div class="value">Угол крена дерева: <span id="RollAngleDinamic">0</span>º</div>
+                                <div class="value">Удерживающий момент грунта: <span id="SoilMomentDinamic">0</span> Н•м</div>
+                            </div>
+                            <div class="values-container">
+                                <div class="name-values">Статика</div>
+                                <div class="value">Предельная скорость (излом ствола): <span id="BreakWindSpeed"></span> м/с</div>
+                                <div class="value">Предельная скорость (опрокидывание): <span id="TippingWindSpeed"></span> м/c</div>
+                                <div class="value">Предельная скорость (отрыв от почвы): <span id="SeparationWindSpeed"></span> м/c</div>
+                                <div class="value">Угол опрокидывания: <span id="TippingAngle"></span>º</div>
+                                <div class="value">Угол отрыва от почвы: <span id="SeparationAngle"></span>º</div>
+                                <div class="value">Момент инерции корневой системы: <span id="SoleMoment"></span> м<sup>4</sup></div>
+                                <div class="value">Момент сопротивления дерева: <span id="ResistanceMoment"></span> м<sup>3</sup></div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </body>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+     <script src="../scripts/chart.js"></script>
+     <script src="../scripts/configs.js"></script>
+     <script src="../scripts/utils.js"></script>
+     <script src="../scripts/createClientId.js"></script>
+    <script>
+        class WindChart {
+            canvas = document.getElementById('WindChart');
+            canvasContainer = this.canvas.parentElement;
+            ctx = this.canvas.getContext('2d');
+
+            constructor(secondStep) {
+                // size - число хранимых меток
+                // secondStep - секундный шаг значений
+
+                this.secondStep = secondStep;
+
+                this.timeLables = this.loadData('TimeLables');
+                this.windSpeed = this.loadData('WindSpeedData');
+
+                this.breakSpeed = this.loadData('BreakSpeedData');
+                this.tippingSpeed = this.loadData('TippingSpeedData');
+                this.separationSpeed = this.loadData('SeparationSpeedData');
+
+                this.canvas.width = this.canvasContainer.width;
+                this.canvas.height = this.canvasContainer.height;
+
+                const width = window.innerWidth;
+                const vw = width / 100;
+                const fontSize = 0.8 * vw;
+                const lableFontSize = 0.7 * vw;
+                const titleFontSize = 0.8 * vw;
+
+                this.chart = new Chart(this.ctx, {
+                    type: 'line',
+                    data: {
+                        labels: this.timeLables,
+                        datasets: [
+                            {
+                                label: 'Скорость ветра',
+                                data: this.windSpeed,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1,
+                                fill: false
+                            },
+
+                            {
+                                label: 'Скорость излома',
+                                data: this.breakSpeed,
+                                borderColor: 'rgb(0, 0, 192)',
+                                tension: 0.1,
+                                fill: false
+                            },
+
+                            {
+                                label: 'Скорость Опрокидывания',
+                                data: this.tippingSpeed, 
+                                borderColor: 'rgb(0, 0, 192)',
+                                tension: 0.1,
+                                fill: false
+                            },
+
+                                                        {
+                                label: 'Скорость Отрыва',
+                                data: this.separationSpeed,
+                                borderColor: 'rgb(0, 0, 192)',
+                                tension: 0.1,
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 40,
+                                ticks: {
+                                    font: {
+                                        size: fontSize
+                                    }
+                                },
+                                title: {
+                                    font: {
+                                        size: titleFontSize 
+                                    },
+                                    display: true,
+                                    text: 'Скорость ветра (м/c)'
+                                }
+                            },
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                ticks: {
+                                    font: {
+                                        size: fontSize
+                                    }
+                                },
+                                title: {
+                                    font: {
+                                        size: titleFontSize
+                                    },
+                                    display: true,
+                                    text: 'Время симуляции (с)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    font: {
+                                        size: lableFontSize
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                this.breakSpeedValue = sessionStorage.getItem('BreakSpeed');
+                this.tippingSpeedValue = sessionStorage.getItem('TippingSpeed');
+                this.separationSpeedValue = sessionStorage.getItem('SeparationSpeed');
+            }
+
+            loadData(nameData) {
+                let data = [0]
+                let prevData = sessionStorage.getItem(nameData);
+                if (prevData) {
+                    let parsed = JSON.parse(prevData); 
+                    data = parsed;
+                }
+
+                return data;
+
+            }
+
+            uploadData(nameData, value){
+                sessionStorage.setItem(nameData, JSON.stringify(value));
+            }
+
+            setStaticSpeeds(breakSpeed, tippingSpeed, separationSpeed) {
+                // Использовать только после reset или инициализации!
+
+                console.log('setStaticData')
+                this.breakSpeedValue = breakSpeed;
+                this.tippingSpeedValue = tippingSpeed;
+                this.separationSpeedValue = separationSpeed;
+
+                this.breakSpeed.length = 0;
+                this.tippingSpeed.length = 0;
+                this.separationSpeed.length = 0;
+
+                sessionStorage.setItem('BreakSpeed', breakSpeed);
+                sessionStorage.setItem('TippingSpeed', tippingSpeed);
+                sessionStorage.setItem('SeparationSpeed', separationSpeed);
+
+                this.addStaticSpeeds2Chart();
+            }
+
+            addStaticSpeeds2Chart() {
+                this.breakSpeed.push(this.breakSpeedValue);
+                this.uploadData('BreakSpeedData', this.breakSpeed);
+
+                this.tippingSpeed.push(this.tippingSpeedValue);
+                this.uploadData('TippingSpeedData', this.tippingSpeed);
+
+                this.separationSpeed.push(this.separationSpeedValue);
+                this.uploadData('SeparationSpeedData', this.separationSpeed)
+            }
+            
+            addValue (value) {
+                // Value - значение скорости ветра в момент добавления
+
+                this.timeLables.push(this.timeLables[this.timeLables.length-1]+this.secondStep);
+                this.chart.data.labels = this.timeLables;
+                this.uploadData('TimeLables', this.timeLables);
+
+                this.windSpeed.push(value);
+                this.chart.data.datasets[0].data = this.windSpeed;
+                this.uploadData('WindSpeedData', this.windSpeed);
+
+                this.addStaticSpeeds2Chart();
+
+                this.chart.update();
+            }
+
+            reset() {
+                this.breakSpeed.length = 0;
+                this.breakSpeed.push(this.breakSpeedValue);
+
+                this.timeLables.length = 0;
+                this.timeLables.push(0);
+
+                this.tippingSpeed.length = 0;
+                this.tippingSpeed.push(this.tippingSpeedValue);
+
+                this.windSpeed.length = 0;
+                this.windSpeed.push(0)
+
+                this.separationSpeed.length = 0;
+                this.separationSpeed.push(this.separationSpeedValue);
+
+                this.uploadData('WindSpeedData', this.windSpeed);
+                this.uploadData('BreakSpeedData', this.breakSpeed);
+                this.uploadData('TippingSpeedData', this.tippingSpeed);
+                this.uploadData('SeparationSpeedData', this.separationSpeed);
+                this.uploadData('TimeLables', this.timeLables);
+
+                this.chart.update();
+            }
+
+        }
+        
+        class Simulator {
+            cons = document.getElementById('Console');
+
+            // == Static ==
+            soilName = document.getElementById('SoilName');
+            rootType = document.getElementById('RootType');
+
+            bws = document.getElementById('BreakWindSpeed');
+            tws = document.getElementById('TippingWindSpeed');
+            sws = document.getElementById('SeparationWindSpeed');
+
+            tAngle = document.getElementById('TippingAngle');
+            sAngle = document.getElementById('SeparationAngle');
+
+            sMoment = document.getElementById('SoleMoment');
+            rMoment = document.getElementById('ResistanceMoment');
+            // ===
+
+            // == Dinamic ==
+            stress = document.getElementById('TreeSress');
+            dinamicRollAngle = document.getElementById('RollAngleDinamic');
+            dinamicSoilMoment = document.getElementById('SoilMomentDinamic')
+
+            // Circles
+            circleStart = document.getElementById('CircleStart');
+            circlePause = document.getElementById('CirclePause');
+            circleStop = document.getElementById('CircleStop'); 
+
+            // Tree
+            treeImg = document.getElementById('TreeImg');
+            crownImg = document.getElementById('CrownTree');
+            treeContainer = document.getElementById('TreeContainer')
+
+            windSpeedVector = document.getElementById('WindSpeedVector');
+            windForceVector = document.getElementById('WindForceVector');
+
+            soilVector = document.getElementById('SoilVector');
+            soilVectorContainer = document.getElementById('SoilVectorContainer');
+
+            weightVector = document.getElementById('WeightMomentVector');
+            weightVectorContainer = document.getElementById('WeightVectorContainer');
+
+            windMomentVector = document.getElementById('WindMomentVector');
+            windVectorContainer = document.getElementById('WindVectorContainer');
+
+            rollAngle = document.getElementById('RollAngle');
+            rollAngleContainer = document.getElementById('RollAngleContainer');
+
+            windowRollAngle = document.getElementById('WindowRollAngle');
+            stateTree = document.getElementById('TreeState');
+            windowWindForce = document.getElementById('WindowWindForce');
+            saffety = document.getElementById('Saffety');
+            bendingMoment = document.getElementById('BendingMoment');
+
+            // Wind Speed
+            windSpeedDisplay = document.getElementById('windSpeed');
+
+            constructor() {
+                // sessionStorage.setItem('ClientId', 1);
+                this.clientId = sessionStorage.getItem('ClientId');
+                this.backend = new ClientApiRequests(SERVER_URL, 'simulator', this.clientId);
+                // this.backend = new ClientApiRequests(SERVER_URL, 'simulator', 1);
+
+                this.chart = new WindChart(0.1);
+
+                this.windSpeed = sessionStorage.getItem('WindSpeed');
+                if (this.windSpeed == null) {
+                    this.windSpeed = 0;
+                    sessionStorage.setItem('WindSpeed', this.windSpeed);
+                }
+
+                this.isSimulation = sessionStorage.getItem('IsSimulation');
+                if (this.isSimulation == null) this.isSimulation = 0;
+                this.isStop = 0;
+
+                this.isPause = sessionStorage.getItem('IsPause');
+                if (this.isPause == null) this.isPause = 0;
+
+                this.treeId = sessionStorage.getItem("TreeId");
+                if (this.treeId != null) {
+                    this.writeConsole("Дерево успешно установлено!", 2);
+
+                    const rType = JSON.parse(sessionStorage.getItem("TreeData"))['type_root'];
+                    this.writeRootType(rType);
+                    this.writeTree(1);
+                }
+
+                this.soilId = sessionStorage.getItem("SoilId");
+                if (this.soilId != null) {
+                    this.writeConsole("Почва успешно установлена!", 2)
+                    this.writeSoilName(sessionStorage.getItem('SoilName'));
+                }
+
+                this.isCharInterval = false;
+                this.chartInterval = 100;
+                this.chartInterValFunc = null;
+
+                if (this.isSimulation == 1) {
+                    this.startInterval();
+                    this.getUpdates();
+                }
+            }
+            async initPage(){
+                // if (this.clientId == null) {
+                //     createClientId();
+                //     this.clientId = sessionStorage.getItem('ClientId');
+                // }
+
+                // this.backend = new ClientApiRequests(SERVER_URL, this.clientId);
+
+                let staticData = JSON.parse(sessionStorage.getItem('StaticData'));
+
+                let isUpdateTree = sessionStorage.getItem('IsUpdateTree');
+                if (isUpdateTree == null) isUpdateTree = 0;
+                let isUpdateSoil = sessionStorage.getItem('IsUpdateSoil');
+                if (isUpdateSoil == null) isUpdateSoil = 0; 
+
+                // console.log(isUpdateSoil, isUpdateTree);
+                if (isUpdateTree == 1 | isUpdateSoil == 1) {
+                    const response = await this.backend.post('set-data', '', {
+                            'tree_id': this.treeId, 
+                            'soil_id': this.soilId,
+                        }
+                    );
+                    if (response.status == 200) {
+                        staticData = await response.json();
+                        sessionStorage.setItem('StaticData', JSON.stringify(staticData));
+
+                        isUpdateTree = 0;
+                        isUpdateSoil = 0;
+
+                        sessionStorage.setItem('IsUpdateTree', 0);
+                        sessionStorage.setItem('IsUpdateSoil', 0);
+                    }
+                }
+                    
+                if (staticData != null) {
+                    this.writeStatic(staticData);
+                    if (this.isSimulation != 1) this.chart.setStaticSpeeds(staticData['wind_speed_break'], staticData['wind_speed_tipping'], staticData['wind_speed_separation']);
+                }
+
+                if (this.isSimulation != 1 & this.treeId != null & this.soilId != null) {
+                    this.writeStopSimulation();
+                }
+                else if (this.isSimulation == 1) {
+                    this.writeRunSimulation();
+                    if (this.isPause == 1) {
+                        this.writePauseSimulation();
+                    } 
+
+                }
+            }
+
+            // Simulation states
+
+            setRunSimulation(status) {
+                // status: 1 - on 0 - off
+                this.isSimulation = status;
+                sessionStorage.setItem('IsSimulation', status);
+            }
+            
+            setStopSimulation(status) {
+                // status: 1 - on 0 - off
+                this.isStop = status;
+            }
+
+            setPauseSimulation(status) {
+                // status: 1 - on 0 - off
+                this.isPause = status;
+                sessionStorage.setItem('IsPause', status);
+            }
+
+            switchPauseSimulation() {
+                if (this.isPause != 1 && this.isPause != 0) {
+                    this.isPause = 0;
+                    sessionStorage.setItem('IsPause', this.isPause);
+                    return 0;
+                };
+
+                if (this.isPause == 0) {this.isPause = 1}
+                else {this.isPause = 0};
+
+                sessionStorage.setItem('IsPause', this.isPause);
+            }
+
+            // ====
+
+            // initChart() {
+            //     this.canvas.width = this.canvasContainer.width;
+            //     this.canvas.height = this.canvasContainer.height;
+
+            //     const chart = new Chart(this.ctx, {
+            //         type: 'line',
+            //         data: {
+            //             labels: [-10, 100], // x
+            //             datasets: [
+            //                 {
+            //                     label: 'Скорость (м/c)',
+            //                     data: [10, 10], // y
+            //                     borderColor: 'rgb(75, 192, 192)',
+            //                     tension: 0.1,
+            //                     fill: false
+            //                 },
+            //             //     // Добавляем константные линии как отдельные датасеты
+            //             //     ...CONSTANTS.map((value, index) => ({
+            //             //         label: `${value} км/ч`,
+            //             //         data: [],
+            //             //         borderColor: `rgba(255, 0, 0, ${0.3 + index * 0.2})`,
+            //             //         borderDash: [5, 5],
+            //             //         pointRadius: 0,
+            //             //         fill: false
+            //             //     }))
+            //             ]
+            //         },
+            //         options: {
+            //             animation: false,
+            //             scales: {
+            //                 y: {
+            //                     beginAtZero: true,
+            //                     max: 100,
+            //                     title: {
+            //                         display: true,
+            //                         text: 'Скорость (м/c)'
+            //                     }
+            //                 },
+            //                 x: {
+            //                     type: 'linear',
+            //                     position: 'bottom',
+            //                     title: {
+            //                         display: true,
+            //                         text: 'Время (с)'
+            //                     }
+            //                 }
+            //             },
+            //             plugins: {
+            //                 legend: {
+            //                     display: true
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
+
+            writeTree(mod) {
+                // 1 - on 0 - off
+                let value = mod ? 'visible' : 'hidden';
+                this.treeContainer.style.visibility = value;
+            }
+
+            writeWorkZone(mod) {
+                // 0 - off 1 - on
+
+                let value = mod ? 'visible' : 'hidden';
+
+                this.soilVectorContainer.style.visibility = value;
+                this.windVectorContainer.style.visibility = value;
+                this.weightVectorContainer.style.visibility = value;
+                this.rollAngleContainer.style.visibility = value;
+            }
+
+            writeSoilName(name){
+                this.soilName.textContent = name;
+            }
+
+            writeRootType(rType) {
+                this.rootType.textContent = rType;
+            }
+
+            writeConsole(text, mod) {
+                // 0 - normal 1 - error 2 -done
+
+                if (mod == 0) {
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text">`
+                                                           +text+
+                                                          `</li>`);
+                }
+
+                else if (mod == 1) {
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-error">`
+                                        +text+
+                                        `</li>`);
+                }
+                else if (mod == 2){
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-done">`
+                                        +text+
+                                        `</li>`);
+                }
+
+                this.cons.scrollTop = this.cons.scrollHeight;
+            }
+
+            // Writing Simulation states
+
+            writeRunSimulation() {
+                this.writeConsole('Симуляция успешно запущена!', 2);
+                this.setRunCircles();
+
+                this.writeWorkZone(1);
+            }
+
+            writeStopSimulation() {
+                if (this.isStop == 1) {this.writeConsole('Симуялция остановлена', 2)}
+                this.setStopCirles();
+                this.writeWorkZone(0);
+            }
+
+            writePauseSimulation() {
+                if (this.isPause == 1) {
+                    this.writeConsole('Симуляция приостановлена', 2);
+                    this.setPauseCircles();
+                }
+                else {
+                    this.writeConsole('Симуляция возоблена', 2);
+                    this.setRunCircles();
+                }
+            }
+
+            // Circles State
+
+            setCircle(circle, mod) {
+                // mod 1 - on 0 - off
+                let color = mod ? 'green' : 'red';
+                circle.style.backgroundColor = color; 
+
+            }
+
+            setStopCirles() {
+                if (this.isPause == 1) {this.setCircle(this.circlePause, 1)}
+                else {this.setCircle(this.circlePause, 0)};
+                this.setCircle(this.circleStart, 0);
+                this.setCircle(this.circleStop, 1);
+            }
+
+            setRunCircles() {
+                this.setCircle(this.circlePause, 0);
+                this.setCircle(this.circleStart, 1);
+                this.setCircle(this.circleStop, 0);
+            }
+
+            setPauseCircles() {
+                this.setCircle(this.circlePause, 1);
+                this.setCircle(this.circleStart, 1);
+                this.setCircle(this.circleStop, 0);
+            }
+
+            // =====
+
+            reset() {
+                sessionStorage.removeItem("TreeId");
+                sessionStorage.removeItem("SoilId");
+                sessionStorage.removeItem("IsUpdateSoil");
+                sessionStorage.removeItem("IsUpdateTree");
+                this.stopInterval();
+                sessionStorage.removeItem('StaticData');
+
+                this.setRunSimulation(0);
+                this.chart.reset();
+
+                location.reload();
+            }
+            // Write values
+
+            writeStatic(staticData) {
+                // resistance_moment: 0.21568997062302425
+                // 
+                // separation_angle: 0.01953125
+                // ​
+                // soil_moment: 21.333333333333332
+                // ​
+                // tipping_angle: 0.05137941821521814
+                // ​
+                // wind_speed_break: 0
+                // ​
+                // wind_speed_separation: 6.148873228105182
+                this.bws.textContent = staticData['wind_speed_break'].toFixed(2);
+                this.tws.textContent = staticData['wind_speed_tipping'].toFixed(2);
+                this.sws.textContent = staticData['wind_speed_separation'].toFixed(2);
+
+                this.tAngle.textContent = staticData['tipping_angle'].toFixed(2);
+                this.sAngle.textContent = staticData['separation_angle'].toFixed(2);
+
+                this.sMoment.textContent = staticData['root_moment'].toFixed(2);
+                this.rMoment.textContent = staticData['resistance_moment'].toFixed(2);
+            }
+
+            writeDinamic(dinamicData) {
+                this.stress.textContent = dinamicData['stress'];
+                this.dinamicRollAngle.textContent = dinamicData['roll_angle'];
+                this.dinamicSoilMoment.textContent = dinamicData['soil_moment'];
+            }
+
+            writeVectorsValues(dinamicData, speed) {
+                this.soilVector.textContent = dinamicData['soil_moment']
+                if (this.isPause == 0) this.windSpeedVector.textContent = speed;
+                this.windForceVector.textContent = dinamicData['wind_force'];
+                this.weightVector.textContent = dinamicData['weight_moment'];
+                this.windMomentVector.textContent = dinamicData['wind_moment'];
+            }
+
+            writeWindowValues(dinamicData) {
+                this.rollAngle.textContent = dinamicData['roll_angle'];
+                this.bendingMoment.textContent = dinamicData['wind_moment'];
+                this.windowRollAngle.textContent = dinamicData['roll_angle'];
+                this.windowWindForce.textContent = dinamicData['wind_force'];
+                this.saffety.textContent = dinamicData['safety_factor'];
+
+                let treeStateValue = '';
+                switch (dinamicData['tree_status']){
+                    case 'normal':
+                        treeStateValue = 'Нормальное';
+                        break;
+                    case 'separation':
+                        treeStateValue = 'Отрыв от почвы';
+                        break;
+                    case 'tipping':
+                        treeStateValue = 'Опрокинуто';
+                        break;
+                    case 'break':
+                        treeStateValue = 'Сломано';
+                        break;
+                }
+
+                this.stateTree.textContent = treeStateValue;
+            }
+
+            // ==== 
+            // Interval 
+
+            startInterval() {
+                if (this.isCharInterval) return;
+
+                this.isCharInterval = true;
+                this.chartInterValFunc = setInterval(() => {
+                    if (this.isPause == 0) { 
+                        this.chart.addValue(this.windSpeed);
+                    }
+                }, this.chartInterval);
+            }
+
+            stopInterval() {
+                if (!this.isCharInterval) return;
+
+                this.isCharInterval = false;
+                clearInterval(this.chartInterValFunc);
+                this.chartInterValFunc = null;
+            }
+
+            // ===
+
+            rotateTree(angle) {
+                this.treeContainer.style.transform = 'rotate(' + angle*10 + 'deg)'
+            }
+
+            treeStateHandler(state, angle) {
+                switch (state) {
+                    case 'break':
+                        this.treeImg.src = '../imgs/Tree2.png';
+                        this.crownImg.style = '';
+                        this.writeWorkZone(0);
+                        break;
+                    case 'tipping':
+                        this.rotateTree(152);
+                        this.writeWorkZone(0);
+                        break;
+                    default:
+                        this.writeWorkZone(1);
+                        this.treeImg.src = '../imgs/Tree1.png';
+                        this.crownImg.style = 'visibility: hidden;'
+                        this.rotateTree(angle);
+                        break;
+                }
+            }
+
+            async run() {
+                if ((this.soilId == null & this.isTree == null)) {
+                    if (!this.isSoil){
+                        this.writeConsole('Почва не установлена! Установите почву и попробуйте еще раз!', 1);
+                    }
+                    if (!this.isTree) {
+                        this.writeConsole('Дерево не установлено! Установите дерево и попробуйте еще раз!', 1);
+                    }
+                    return 0;
+                }
+
+                const isSimulation = sessionStorage.getItem('IsSimulation'); 
+
+                if (isSimulation != 1) {
+                    await this.backend.post('run');
+
+                    this.getUpdates();
+                    this.setRunSimulation(1);
+                    this.writeRunSimulation();
+                    this.startInterval();
+
+                    this.windSpeedDisplay.textContent = 0;
+                }
+            }
+        
+            stop() {
+                if (this.isSimulation == 1) {
+                    this.backend.post('stop');
+
+                    this.setStopSimulation(1);
+                    this.setRunSimulation(0);
+                    this.setPauseSimulation(0);
+                    this.stopInterval();
+                    this.chart.reset();
+                    this.rotateTree(0);
+
+                    this.windSpeed = 0;
+                    sessionStorage.setItem('WindSpeed', 0);
+
+                    this.writeStopSimulation();
+                    location.reload();
+                }
+            }
+
+            pause() {
+                if (this.isSimulation == 1) {
+                    this.backend.post('pause');
+                    this.switchPauseSimulation();
+                    if (this.isPause == 0) this.getUpdates();
+                    this.writePauseSimulation();
+                }
+            }
+
+
+            getUpdates() {
+                this.backend.get('simulation-data').then(
+                        response => response.json()
+                    ).then(data => {
+                        console.log(data);
+                        this.writeDinamic(data);
+                        this.writeVectorsValues(data, this.windSpeed);
+                        this.writeWindowValues(data);
+
+                        this.treeStateHandler(data['tree_status'], data['roll_angle']);
+                    })
+            }
+
+
+            async setSpeed(speed) {
+                this.windSpeedDisplay.textContent = speed;
+                this.windSpeed = speed;
+                sessionStorage.setItem('WindSpeed', speed);
+
+                if (this.isSimulation == 1){
+                    await this.backend.post('set-speed', 'speed='+speed)
+
+                    this.getUpdates();
+                }
+            }
+        }
+
+        const simul = new Simulator(); 
+        createClientId(SERVER_URL).then(() => {
+            simul.initPage();
+        })
+        // simul.initPage();
+
+        const resetButton = document.getElementById('ResetButton');
+
+        const runButton = document.getElementById('RunButton');
+        const pauseButton = document.getElementById('PauseButton');
+        const stopButton = document.getElementById('StopButton'); 
+
+        const slider = document.getElementById('windSlider');
+        const valueDisplay = document.getElementById('windSpeed');
+        
+        slider.oninput = function() {
+            simul.setSpeed(this.value);
+        }
+
+        runButton.onclick = function() {
+            simul.run();
+        }
+        
+        stopButton.onclick = function() {
+            simul.stop();
+        }
+
+        pauseButton.onclick = function() {
+            simul.pause();
+        }
+
+        resetButton.onclick = function(){
+            simul.reset();
+        }
+    </script>
+</html>

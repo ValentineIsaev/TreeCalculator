@@ -1,0 +1,202 @@
+.set-tree-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+
+    height: 100%;
+    width: 100%;
+}
+
+.left-column {
+    
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    width: 100%;
+}
+
+.info {
+    border: 0.5vw solid #075287;
+    box-sizing: border-box; 
+    height: 100%;
+    padding: 1vh;
+
+    position: relative;
+}
+
+.info-name{
+    text-align: center;
+    font-size: 1.9vw;
+    /* margin-bottom: 15px; */
+}
+
+.tree-field-container {
+    flex: 1;
+    min-height: 0;
+    padding: 1vw;
+}
+
+.tree-field {
+    width: 100%;
+    height: 100%;
+    border: 0.5vw solid #075287;
+    background: rgba(255, 255, 255, 0.1);
+    overflow-y: auto;
+}
+
+/* Стили для списка деревьев */
+.tree-list {
+    list-style: none;
+    padding: 1.1vw;
+}
+
+.tree-item {
+    /* margin-bottom: 1px; */
+    border-radius: 5vw;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tree-button {
+    width: 100%;
+    text-align: left;
+    padding: 2vh 1vw;
+    background: white;
+    border: 0.15vw solid #075287;
+    border-radius: 0.2vw;
+    cursor: pointer;
+    font-size: 1.1vw;
+    color: #2c3e50;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    /* gap: 1vh; */
+}
+
+.tree-button:hover {
+    background: #075287;
+    color: #dae1e5;
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.tree-button.selected {
+    background: #075287;
+    color: #dae1e5;
+    border-color: #0b80d4;
+    box-shadow: 0 4px 12px rgba(7, 82, 135, 0.5);
+}
+
+.tree-icon {
+    font-size: 2vw;
+    width: 30px;
+    text-align: center;
+}
+
+.tree-info {
+    flex: 1;
+}
+
+.tree-name {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.tree-desc {
+    font-size: 2vw;
+    opacity: 0.8;
+}
+
+.tree-button:active {
+    transform: scale(0.98);
+}
+
+/* Кастомный скроллбар */
+.tree-field::-webkit-scrollbar {
+    width: 10px;
+}
+
+.tree-field::-webkit-scrollbar-track {
+    background: rgba(7, 82, 135, 0.1);
+    border-radius: 5px;
+}
+
+.tree-field::-webkit-scrollbar-thumb {
+    background: #075287;
+    border-radius: 5px;
+}
+
+.tree-field::-webkit-scrollbar-thumb:hover {
+    background: #0b80d4;
+}
+
+/* Стили для правой панели */
+.tree-details {
+    display: none;
+    margin-top: 15px;
+}
+
+.tree-details.active {
+    display: block;
+}
+
+.detail-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.9vh;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 3vh;
+    margin-top: 0.1vh;
+    font-size: 1.15vw;
+}
+
+.detail-title {
+    font-size: 1.5vw;
+    font-weight: bold;
+    color: #075287;
+    margin-bottom: 0.2vh;
+}
+
+.detail-value {
+    margin: 0;
+    padding: 0;
+    /* margin-top: -5%; */
+    /* border: 1px solid black; */
+}
+
+.control-buttons-container {
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    bottom: 0;
+    /* margin-bottom: %; */
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    height: 15%;
+    width: 60%;
+
+    /* border: 1px solid black; */
+
+    gap: 2%;
+}
+
+.control-button {
+    color: #dae1e5;
+    font-size: 1.5vw;
+
+    clip-path: polygon(50% 0%, 80% 0%, 100% 50%, 80% 100%, 50% 100%, 20% 100%, 0% 50%, 20% 0%);
+    background-color: #075287;
+    border: none;
+
+    padding: 0.5vh 1vw;
+    height: fit-content;
+}
+
+.control-button:hover {
+    filter: brightness(1.2); 
+    cursor: pointer;
+}

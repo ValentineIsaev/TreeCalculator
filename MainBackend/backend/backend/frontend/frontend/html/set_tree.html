@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Главная страница</title>
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/set-tree.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="/"><button class="head-button static-head-button">Главная</button></a>
+                <a href="/simulator"><button class="head-button push-head-button">Симуляция</button></a>
+                <a href="/calculator"><button class="head-button static-head-button">Калькулятор</button></a>
+                <a href="/editor"><button class="head-button static-head-button">Редактор</button></a>
+<!--                <a href="helper.shtml"><button class="head-button static-head-button">Справочник</button></a>-->
+                <!-- <span class="lyceum">Престиж, 2026</span> -->
+            </div>
+        </header>
+        <!-- Основное рабочее поле -->
+        <div class="main-container">
+            <div class="set-tree-container">
+                <!-- Левая колонка -->
+                <div class="left-column">
+                    <!-- Название страницы -->
+                    <div class="name-container">
+                        <div class="window-name">Симулятор</div>
+                        <div class="window-subname">Установка дерева</div>
+                    </div>  
+                    
+                    <!-- Контейнер для списка деревьев -->
+                    <div class="tree-field-container">
+                        <div class="tree-field">
+                            <ul class="tree-list" id="TreesList">
+                                <li class="tree-item">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Правая колонка -->
+                <div class="info">
+                    <p class="info-name">Информация о дереве</p>
+                    <div id="treeDetails" class="tree-details">
+                        <div class="detail-card">
+                            <div class="detail-title" id="Name"></div>
+                            <p class="detail-value"><strong>Высота:</strong> <span id="Height"></span> м</p>
+                            <p class="detail-value"><strong>Вес:</strong> <span id="Weight"></span> H</p>
+                            <p class="detail-value"><strong>Диаметр (на высоте груди взрослого человек):</strong> <span id="Diameter"></span> м</p>
+                            <p class="detail-value"><strong>Площадь вертикальной проекции кроны:</strong> <span id="CrownSquare"></span> м&sup2;</p>
+                            <p class="detail-value"><strong>Тип корневой системы:</strong> <span id="TypeRoot"></span></p>
+                            <p class="detail-value"><strong>Сведения:</strong> <span id="Info"></span></p>
+                        </div>
+                    </div>
+                    <div class="control-buttons-container">
+                        <button class="control-button" id="SetTree">Установить</button>
+                        <button class="control-button" onclick="window.location.href='simulator.html'">Выход</button>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="../scripts/utils.js"></script>
+    <script src="../scripts/configs.js"></script>
+    <script>
+        sessionStorage.removeItem('RenderTreeId');
+
+        const request = new ApiRequests(SERVER_URL, 'simulator')
+
+        const treeList = document.getElementById("TreesList");
+
+        let trees = {};
+        async function initApp() {
+            soilId = sessionStorage.getItem('SoilId');
+            if (soilId != null) {
+                const response = await request.get('get-trees-by-soil', 'soil_id=' + soilId)
+                trees = await response.json();
+            }
+            else {
+                const response = await request.get('get-trees');
+                trees = await response.json();
+            }
+
+            for (const treeId in trees){
+            treeList.insertAdjacentHTML('beforeend', `<button class="tree-button" onclick="selectTree(this,`+treeId+`)">
+                                            <div class="tree-info">
+                                                <div class="tree-name">`+trees[treeId]['name']+`</div>
+                                            </div>
+                                        </button>`);
+            }
+        }
+
+        initApp();
+
+        function selectTree(button, treeId) {
+            const allButtons = document.querySelectorAll('.tree-button');
+            allButtons.forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            button.classList.add('selected');
+            document.getElementById('treeDetails').classList.add('active');
+            updateTreeInfo(treeId);
+        }
+        
+        function updateTreeInfo(treeId) {
+            const name = document.getElementById('Name');
+            const height = document.getElementById('Height');
+            const weight = document.getElementById('Weight');
+            const diameter = document.getElementById('Diameter');
+            const crown_square = document.getElementById('CrownSquare');
+            const type_root = document.getElementById('TypeRoot');
+            const info = document.getElementById('Info');
+            
+            
+            tree = trees[treeId]
+            sessionStorage.setItem('RenderTreeId', treeId);
+
+            name.textContent = tree['name'];
+            height.textContent = tree['height'];
+            weight.textContent = tree['weight'];
+            diameter.textContent = tree['diameter'];
+            crown_square.textContent = tree['crown_square'];
+            type_root.textContent = tree['type_root'];
+            info.textContent = tree['info'];
+        }
+
+        const setButton = document.getElementById("SetTree");
+        setButton.onclick = function() {
+                const treeId = sessionStorage.getItem("RenderTreeId");
+                if (treeId != null) {
+                    sessionStorage.setItem("TreeId", treeId);
+                    sessionStorage.setItem('IsUpdateTree', 1);
+                    sessionStorage.setItem("TreeData", JSON.stringify(trees[treeId]));
+                    window.location.href = "/simulator";
+                }
+        }
+    </script>
+</html>

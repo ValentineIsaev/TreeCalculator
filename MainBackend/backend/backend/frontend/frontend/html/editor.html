@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Главная страница</title>
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/editor.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="/"><button class="head-button static-head-button">Главная</button></a>
+                <a href="/simulator"><button class="head-button static-head-button">Симуляция</button></a>
+                <a href="/calculator"><button class="head-button static-head-button">Калькулятор</button></a>
+                <a href="/editor"><button class="head-button push-head-button">Редактор</button></a>
+<!--                <a href="helper.html"><button class="head-button static-head-button">Справочник</button></a>-->
+                <!-- <span class="lyceum">Престиж, 2026</span> -->
+            </div>
+        </header>
+        <div class="main-container">
+            <div class="editor-container">
+                <div class="head-container">
+                    <div class="name-container" style="height: 100%;">
+                        <div class="window-name">Редактор</div>
+                        <div class="window-subname">Базы данных</div>
+                    </div>
+                    <div class="menu-container">
+                        <button class="menu-button" onclick="switchContent('Home')">Главная</button>
+                        <button class="menu-button" onclick="switchContent('Soil')">Редактор почв</button>
+                        <button class="menu-button" onclick="switchContent('Tree')">Редактор деревьев</button>
+                        <button class="menu-button" onclick="switchContent('Root')">Редактор корневых систем</button>
+                    </div>
+                </div>
+                <div class="work-container">
+                    <!-- HOME -->
+                    <div class="content-block active-mod home-container" id="Home">
+                        <span class="home-title">Редактор</span>
+                        <div class="home-content">
+                            <div class="home-text">
+                                Редактор позволяет управлять базой данных деревьев и почв, 
+                                а также задавать параметры корневых систем для различных комбинаций дерева и грунта. 
+                                Это основной инструмент для наполнения системы данными и настройки моделей под конкретные задачи.
+                                <br><br>
+                                В разделе «Деревья» можно добавлять новые породы, редактировать их характеристики: высоту, диаметр ствола, 
+                                вес, площадь кроны, коэффициент аэродинамического сопротивления, предел прочности древесины, высоту центра тяжести, 
+                                тип корневой системы. Также здесь указывается справочная информация и описание породы.
+                                <br><br>
+                                В разделе «Почвы» создаются и редактируются типы грунтов. Для каждой почвы задаётся коэффициент 
+                                жёсткости основания, который напрямую влияет на устойчивость дерева. Чем плотнее грунт, тем выше его жёсткость.
+                                <br><br>
+                                Раздел «Корневые системы» связывает деревья с почвами. Здесь для каждой пары «дерево – 
+                                грунт» задаются размеры корневой подошвы: длина и ширина. Эти параметры определяют, насколько широко 
+                                раскинулись корни, и критически важны для расчёта устойчивости дерева к опрокидыванию.
+                                <br><br>
+
+                                Все добавленные данные сразу становятся доступны в симуляторе и калькуляторе. 
+                                Это позволяет гибко настраивать систему и расширять базу видов деревьев и типов почв без изменения кода.
+                            </div>
+                            <img src="../imgs/EditorMainLogo.png" class="home-logo">
+                        </div>
+                    </div>
+                    <!-- SOILS -->
+                    <div class="content-block deactive-mod work-edit-container" id="Soil">
+                        <div class="input-container">
+                            <span class="input-title">Создать почву</span>
+                            <table border=1 class="input-table">
+                                <thead>
+                                    <tr>
+                                        <th class="param-name-table">Параметр</th>
+                                        <th class="param-info-table">Единицы измерения</th>
+                                        <th class="param-value-table">Значение</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Название</td>
+                                        <td></td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="SoilName">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Коэффициент жесткости</td>
+                                        <td>Па/м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="SoilC">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="save-button tree-save-button" onclick="addSoil();">Создать</button>
+                            <div class="console-container">
+                                <ul class="console" id="SoilConsole">
+                                    <li class="console-text">Введите данные в форму</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="soil-info-container">
+                            <span class="soil-info-text">
+                                Редактор почв позволяет создавать и редактировать типы грунтов, используемые в расчётах. 
+                                Для каждой почвы задаётся два основных параметра: название и коэффициент жёсткости основания.
+                                <br><br>
+                                Коэффициент жёсткости измеряется в паскалях на метр и определяет, на сильно грунт сопротивляется повороту корневой 
+                                системы. Чем плотнее почва, тем выше значение жёсткости. Например, для песка этот коэффициент ниже, чем для глины или 
+                                чернозёма.
+                                <br><br>
+                                После добавления новая почва сразу становится доступна для выбора в симуляторе. 
+                                Это позволяет гибко настраивать среду моделирования под различные условия без изменения программного кода.
+                                <br><br>
+                            </span>
+                            <img src="../imgs/SoilLogo.png" class="soil-logo">
+                        </div>
+                    </div>
+                    <!-- TREE -->
+                    <div class="content-block deactive-mod work-edit-container" id="Tree">
+                        <div class="input-container">
+                            <span class="input-title">Создание дерева</span>
+                            <table border="1" class="input-table">
+                                <thead>
+                                    <tr>
+                                        <th class="param-name-table">
+                                            Параметр
+                                        </th>
+                                        <th class="param-info-table">
+                                            Единицы измерения
+                                        </th>
+                                        <th  class="param-value-table">
+                                            Значение
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Название
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <input type="text" maxlength="10" class="input-table-text" id="TreeName">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Вес
+                                        </td>
+                                        <td>H</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeWeight">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Высота</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeHeight">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Высота центра тяжести</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeL">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Диаметр</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeDiameter">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>C<sub>D</sub></td>
+                                        <td></td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeCD">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Площадь проекции кроны</td>
+                                        <td>м<sup>2</sup></td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeSquare">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Предельное механическое напряжение</td>
+                                        <td>Па/м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeMaxStress">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Тип корневой системы</td>
+                                        <td></td>
+                                        <td>
+                                            <input type="text" maxlength="15" class="input-table-text" id="TreeTypeRoot">
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td>Базовый грунт</td>
+                                        <td></td>
+                                        <td>
+                                            <select class="input-table-text" id="SoilsSelect">
+                                            </select>
+                                        </td>
+                                    </tr> -->
+                                    <!-- <tr>
+                                        <td>Длина корневой системы</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="TreeA">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ширина корневой системы</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type=text class="input-table-text" id="TreeB">
+                                        </td> -->
+                                    </tr>
+                                    <tr>
+                                        <td>Описание дерева<br><br><br><br><br></td>
+                                        <td></td>
+                                        <td>
+                                            <textarea type="text" maxlength="50" class="input-table-text" placeholder="Введите описание" id="TreeInfo"></textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="save-button tree-save-button" onclick="addTree.createTree();">Создать</button>
+                            <div class="console-container">
+                                <ul class="console" id="SoilConsole">
+                                    <li class="console-text">Введите данные в форму</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tree-info">
+                            <div class="info-tree-block">
+                                <p>Редактор деревьев позволяет управлять базой данных древесных пород, используемых в расчётах. 
+                                    Здесь можно добавлять новые виды деревьев, удалять устаревшие записи. 
+                                    Каждое дерево описывается набором параметров, которые напрямую влияют на его 
+                                    устойчивость к ветровым нагрузкам.</p>
+                            </div>
+                            <div class="info-tree-block">
+                                <p>Высота дерева измеряется в метрах и определяет плечо приложения ветровой нагрузки. 
+                                    Вес в ньютонах рассчитывается исходя из объёма древесины и её плотности. 
+                                    Диаметр ствола на высоте груди взрослого человека — ключевой параметр для расчёта момента сопротивления сечения, 
+                                    от которого зависит прочность ствола на изгиб.
+                                </p>
+                            </div>
+                            <div class="info-tree-block">
+                                <p>Площадь вертикальной проекции кроны в квадратных метрах характеризует парусность дерева. 
+                                Коэффициент аэродинамического сопротивления зависит от густоты кроны: для густых крон он 
+                                выше, для ажурных — ниже. Предел прочности древесины в паскалях — это максимальное напряжение,
+                                 которое выдерживает ствол перед разрушением.</p>
+                            </div>
+                            <div class="info-tree-block">
+                                <p>Высота центра тяжести влияет на возвращающий момент от веса дерева. 
+                                    Тип корневой системы может быть стержневым или поверхностным — 
+                                    это определяет характер взаимодействия с грунтом.</p>
+                            </div>
+                            <div class="info-tree-block">
+                                <p>После добавления или редактирования дерево становится доступно для выбора в симуляторе и калькуляторе, 
+                                    что позволяет гибко расширять базу видов без изменения программного кода.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ROOT -->
+                    <div class="content-block deactive-mod work-edit-container root-work-container" id="Root">
+                        <div class='input-container root-input-container'>
+                            <span class="input-title">Создать корневую систему</span>
+                            <div class="select-container">
+                                <input type="checkbox" id="item1">
+                                <label for="item1" class="select-name">Выбрать дерево</label> 
+                                <div class="select-zone" id="TreeInput">
+                                </div>
+                            </div>
+                            <div class="select-container">
+                                <input type="checkbox" id="item2">
+                                <label for="item2" class="select-name">Выбрать почву</label>
+                                <div class="select-zone" id="SoilInput">
+                                </div>
+                            </div>
+                            <table border=1 class="input-table">
+                                <thead>
+                                    <tr>
+                                        <th class="param-name-table">Параметр</th>
+                                        <th class="param-info-table">Единицы измерения</th>
+                                        <th class="param-value-table">Значение</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Название дерева</td>
+                                        <td></td>
+                                        <td id="TreeTableName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Название почвы</td>
+                                        <td></td>
+                                        <td id="SoilTableName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ширина корневой системы</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="RootTreeA">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Длина корневой системы</td>
+                                        <td>м</td>
+                                        <td>
+                                            <input type="text" class="input-table-text" id="RootTreeB">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="save-button tree-save-button" onclick="addRoot.createRoot()">Создать</button>
+                            <div class="console-container">
+                                <ul class="console" id="RootConsole">
+                                    <li class="console-text">Введите данные в форму</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="root-info">
+                            <p>Редактор корневых систем предназначен для задания параметров 
+                                взаимодействия корневого кома дерева с конкретным типом почвы. 
+                                Здесь для каждой пары «дерево — грунт» определяются размеры подошвы корней, 
+                                которые критически влияют на устойчивость дерева к опрокидыванию.</p>
+                            <div class="root-info-block">
+                                Корневая система моделируется в виде прямоугольной плиты, лежащей на упругом основании. 
+                                Её длина и ширина, обозначаемые a и b, измеряются в метрах и определяют площадь опоры, 
+                                а также распределение давления под подошвой. Ширина b, направленная поперек оси поворота, 
+                                играет ключевую роль, так как от неё в кубической степени зависит момент инерции подошвы — 
+                                характеристика сопротивления грунта повороту.
+                            </div>
+                            <p>
+                                Для деревьев со стержневой корневой системой характерны примерно равные значения a и b, 
+                                но при этом корни уходят глубже в почву. Для поверхностной системы a и b, 
+                                как правило, больше, что даёт широкую опору, но меньшую глубину проникновения. 
+                                В зависимости от типа почвы одни и те же размеры корней могут давать разную устойчивость: 
+                                на плотной глине корни расползаются шире, на рыхлом песке — глубже, но уже.
+                            </p>
+                            <p>
+                                При создании новой записи необходимо выбрать дерево из списка доступных пород, указать тип почвы и задать значения a и 
+                                b, характерные для этой комбинации. Система автоматически проверяет физическую состоятельность введённых параметров, 
+                                отбрасывая варианты, при которых дерево было бы неустойчиво даже в безветренную погоду.
+                            </p>
+                            <p>
+                                Созданные связи позволяют симулятору корректно моделировать поведение дерева в разных грунтовых условиях, 
+                                а калькулятору — давать точные прогнозы критических скоростей ветра.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </body>
+    <script src="../scripts/configs.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+        class MyConsole {
+            constructor() {
+                this.cons = document.getElementById('SoilConsole');
+            }
+
+            setConsole(parentId) {
+                this.cons = document.getElementById(parentId).querySelector('.input-container').querySelector('.console');
+            }
+
+            writeConsole(text, mod) {
+            // 0 - normal 1 - error 2 -done
+
+            if (mod == 0) {
+                this.cons.insertAdjacentHTML('beforeend', `<li class="console-text">`
+                                                        +text+
+                                                        `</li>`);
+            }
+
+            else if (mod == 1) {
+                this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-error">`
+                                    +text+
+                                    `</li>`);
+            }
+            else if (mod == 2){
+                this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-done">`
+                                    +text+
+                                    `</li>`);
+            }
+
+            this.cons.scrollTop = this.cons.scrollHeight;
+        }
+        }
+
+        const cons = new MyConsole();
+        const requests = new ApiRequests(SERVER_URL, 'treebase');
+
+        function switchContent(showContentId) {
+            const blocks = document.querySelectorAll('.content-block');
+            blocks.forEach(block => {
+                block.classList.remove('active-mod');
+                block.classList.add('deactive-mod');
+            });
+
+            const activeBlock = document.getElementById(showContentId);
+            activeBlock.classList.remove('deactive-mod');
+            activeBlock.classList.add('active-mod');
+
+            cons.setConsole(showContentId);
+        }
+
+        function createUrl(url, query) {
+            return SERVER_URL + url + '?' + query;
+        }
+
+        async function get(url, query='') {
+            const response = await fetch(createUrl(url, query));
+            return response;
+        }
+
+        async function post(url, query='', body) {
+            const response = await fetch(createUrl(url, query), 
+                {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify(body)
+                }
+            );
+            return response;
+        }
+
+        let soils = {}
+        async function getSoils() {
+            const response = await requests.get('get-soils');
+            if (response.status == 200) {
+                soils = await response.json();
+            }
+        }
+
+        let trees = {}
+        async function getTrees() {
+            const response = await requests.get('get-trees');
+            if (response.status == 200) {
+                trees = await response.json();
+            }
+        }
+
+        function numberValidator(value, nameValue) {
+                let isError = false;
+
+                if (value[0] === undefined || 
+                    value[0] === null || 
+                    value[0].toString().trim() === '') {
+                    isError = true;
+                } else {
+                    let floatValue = Number(value[0]);
+                    if (isNaN(floatValue)) isError = true;
+                    if (floatValue < 0) isError = true;
+                }
+
+                if (isError) {
+                    cons.writeConsole('Некорректно введен параметр ' + '"' + nameValue + '"', 1);
+                }
+
+                return isError;
+        }
+
+        function textValidator(value, nameValue, maxLength, minLength) {
+            if (minLength >= value.length) {
+                cons.writeConsole('Параметр ' + '"' + nameValue + '"' + ' слишком короткий!', 1);
+                return true;
+            }
+            else if (maxLength <= value.length) {
+                cons.writeConsole('Параметр' + '"' + nameValue + '"' + ' слишком длинный!', 1)
+                return true;
+            }
+            else return false;
+        }
+
+        function renderStatusErrors(statusError) {
+            switch (statusError) {
+                case 102:
+                    cons.writeConsole('Значение уже существует!', 1);
+                    break;
+            }
+        }
+
+
+        const soilName = document.getElementById('SoilName');
+        const soilC = document.getElementById('SoilC');
+        async function addSoil() {
+            const soilNameValue = soilName.value;
+            const soilCValue = soilC.value;
+
+            const isError = numberValidator(soilCValue, 'Коэффициент жесткости грунта');
+
+            if (!isError) {
+                cons.writeConsole('Создание....', 2);
+                const response = await requests.post('create-soil', '', {
+                    'name': soilNameValue,
+                    'soil_c': soilCValue
+                })
+
+                if (response.status == 200) {
+                    cons.writeConsole('Значение успешно добавлено!', 2);
+                    initApp();
+                    return;
+                }
+
+                else if (response.status == 402) {
+                    cons.writeConsole('Почва уже существует в базе данных!', 1);
+                }
+                else {cons.writeConsole('Неизвестная ошибка: ' + status.statusText, 1);}
+            }
+        }
+
+        class AddTree {
+            soilsSelect = document.getElementById('SoilsSelect');
+
+            treeName = document.getElementById('TreeName');
+            weight = document.getElementById('TreeWeight');
+            heigth = document.getElementById('TreeHeight');
+            centerGravityHeight = document.getElementById('TreeL');
+            diameter = document.getElementById('TreeDiameter');
+            cd = document.getElementById('TreeCD');
+            square = document.getElementById('TreeSquare');
+            max = document.getElementById('TreeMaxStress');
+            typeRoot = document.getElementById('TreeTypeRoot');
+            // a = document.getElementById('TreeA');
+            // b = document.getElementById('TreeB');
+            info = document.getElementById('TreeInfo');
+
+            // async InitPage() {
+            //     this.writeSoils(soils);
+            // }
+
+            async createTree() {
+                const name = this.treeName.value;
+                const weight = this.weight.value;
+                const height = this.heigth.value;
+                const l = this.centerGravityHeight.value;
+                const diameter = this.diameter.value;
+                const cd = this.cd.value;
+                const square = this.square.value;
+                const max = this.max.value;
+                const typeRoot = this.typeRoot.value;
+                // const baseSoilId = this.soilsSelect.value;
+                // const a = this.a.value;
+                // const b = this.b.value;
+                const info = this.info.value;
+
+                let isError = false;
+
+                if (textValidator(name, 'Название', 10, 1)) isError = true;
+                if (numberValidator(weight, 'Вес')) isError = true;
+                if (numberValidator(height, 'Высота')) isError = true;
+                if (numberValidator(l, 'Высота центра тяжести')) isError = true;
+                if (numberValidator(diameter, 'Диаметр')) isError = true;
+                if (numberValidator(cd, 'С<sub>D</sub>')) isError = true;
+                if (numberValidator(square, 'Площадь проекции кроны')) isError = true;
+                if (numberValidator(max, 'Предельное механическое напряжение')) isError = true;
+                if (textValidator(typeRoot, 'Тип корневой системы', 15, 1)) isError = true;
+                // if (numberValidator(a, 'Длина корневой системы')) isError = true;
+                // if (numberValidator(b, 'Ширина корневой системы')) isError = true;
+                if (textValidator(info, 'Описание дерева', 50, 1)) isError = true;
+
+                if (!isError){
+                    if (l > height) {
+                        cons.writeConsole('Высота центра тяжести не может быть больше высоты дерева!', 1);
+                        isError = true;
+                    }
+                }
+
+                if (!isError) {
+                    const response = await post('/treebase/create-tree', '', {
+                        'name': name,
+                        'height': height,
+                        'weight': weight,
+                        'center_gravity_height': l,
+                        'diameter': diameter,
+                        'c_d': cd,
+                        'square': square,
+                        'max_stress': max,
+                        'type_root': typeRoot,
+                        'info': info
+                    });
+                    cons.writeConsole('Создание....', 2);
+
+                    let isUpdate = false
+                    switch (response.status) {
+                        case 200:
+                            cons.writeConsole('Дерево успешно создано!', 2);
+                            isUpdate = true;
+                            break;
+                        case 402: 
+                            cons.writeConsole('Дерево с данными параметрами уже существует!', 1);
+                            break;
+                        default:
+                            cons.writeConsole('Неизвестная ошибка:' + response.statusText, 1);
+                            break;
+                    }
+
+                    if (isUpdate) await initApp();
+                }
+            }
+
+            // writeSoils(soilData) {
+            //     console.log(soilData);
+            //     for (let soilId in soilData) {
+            //         const soilOption = document.createElement('option');
+            //         soilOption.value = soilId;
+            //         soilOption.text = soilData[soilId]['name']
+            //         // this.soilsSelect.add(soilOption);
+            //     }
+            // }
+        }
+
+        class AddRoot {
+            soilSelect = document.getElementById('SoilInput');
+            soilCheckBox = document.getElementById('item2');
+
+            soilName = document.getElementById('SoilTableName');
+
+            treeSelect = document.getElementById('TreeInput');
+            treeCkeckBox = document.getElementById('item1');
+
+            treeName = document.getElementById('TreeTableName');
+
+            treeA = document.getElementById('RootTreeA');
+            treeB = document.getElementById('RootTreeB');
+
+            constructor() {
+                this.soilId = null;
+                this.treeId = null;
+            }
+
+            async InitPage() {
+                this.writeSoils(soils);
+                this.writeTrees(trees);
+            }
+
+            setSoil(soilId) {
+                this.soilId = soilId;
+                this.soilCheckBox.checked = false;
+                this.soilName.textContent = soils[soilId]['name'];
+            }
+
+            setTree(treeId) {
+                this.treeCkeckBox.checked = false;
+                this.treeName.textContent = trees[treeId]['name'];
+                this.treeId = treeId;
+            }
+
+            writeTrees(treeData) {
+                this.treeSelect.innerHTML = '';
+                for (let treeId in treeData) {
+                    this.treeSelect.insertAdjacentHTML('beforeend', `<button class="select-tree-container" onclick="addRoot.setTree(`+treeId+`)">
+                                                                        <div class="tree-img-container">
+                                                                            <img class="tree-img" src="../imgs/Tree1.png">
+                                                                        </div>
+                                                                        <span class="tree-name">`+treeData[treeId]['name']+`</span>
+                                                                    </button>`);
+                }
+            }
+
+            writeSoils(soilData) {
+                this.soilSelect.innerHTML = '';
+                for (let soilId in soilData) {
+                    this.soilSelect.insertAdjacentHTML('beforeend', `<button class="select-tree-container" onclick="addRoot.setSoil(`+soilId+`)">
+                                                                        <span class="soil-c">σ=`+soilData[soilId]['c']+`</span>
+                                                                        <span class="tree-name">`+soilData[soilId]['name']+`</span>
+                                                                    </button>`);
+                }
+            }
+
+            async createRoot() {
+                let isError = false;
+
+                const a = this.treeA.value;
+                const b = this.treeB.value;
+
+                if (numberValidator(a, 'Ширина корневой системы дерева')) {
+                    isError = true;
+                }
+
+                if (numberValidator(b, 'Длина корневой системы дерева')) {
+                    isError = true;
+                }
+
+                if(this.treeId == null) {
+                    cons.writeConsole('Укажите дерево, воспользовавшись меню сверху', 1);
+                    isError = true;
+                }
+
+                if (this.soilId == null) {
+                    cons.writeConsole('Укажите почву, воспользовавшись меню сверху', 1);
+                    isError = true;
+                }
+
+                if (!isError) {
+                    cons.writeConsole('Создание...', 2);
+                    const body = {
+                            'tree_id': this.treeId,
+                            'soil_id': this.soilId,
+                            'a': a,
+                            'b': b
+                        }
+                    const response = await post('/treebase/create-root', '', body)
+                    
+                    let isUpdate = false;
+                    switch (response.status) {
+                        case 401:
+                            cons.writeConsole('При данных параметрах дерево не устойчиво без ветра!', 1);
+                            break;
+                        case 402:
+                            cons.writeConsole('Корневая система для этого дерева в этом грунте существует!', 1);
+                            break;
+                        case 200:
+                            cons.writeConsole('Корневая система создана!', 2);
+                            isUpdate = true;
+                            break;
+                        default:
+                            cons.writeConsole('Неизвестная ошибка: ' + response.statusText);
+                            break;
+                    }
+
+                    if(isUpdate) {
+                        initApp();
+                    }
+
+
+                }
+            }
+
+        }   
+
+        const addTree = new AddTree();
+        const addRoot = new AddRoot();
+
+        async function initApp() {
+            await getSoils();
+            await getTrees();
+
+            // addTree.InitPage();
+            addRoot.InitPage();
+        }
+        initApp();
+    </script>
+</html>

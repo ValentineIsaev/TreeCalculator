@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Калькулятор</title>
+        <style>
+            html, body {
+                height: 100%;  
+                margin: 0;     
+                padding: 0;
+            }
+
+            body {
+                background-color: #c3d4e0;
+                display: grid;           
+                place-items: center;      
+            }
+
+            .upload-text {
+                font-size: 1.3vw;
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <span class="upload-text">Загрузка...</span>
+    </body>
+    <script>
+        const CLIENT_ID = 0;
+        const SERVER_URL = 0;
+        const UPLOADS_FILES = [
+            'index.html'
+        ]
+    </script>
+    <script>
+        sessionStorage.setItem('ClientId', CLIENT_ID);
+        const cache = await caches.open('data');
+
+        async function uploadData() {
+            for (let fileName of UPLOADS_FILES) {
+                const response = await fetch(SERVER_URL + '/upload-file' + '?file=' + fileName) 
+            }
+        }
+
+        for (let file of UPLOADS_FILES) {
+
+        }
+    </script>
+</html>

@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <title>Главная страница</title>
+        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/calculator.css">
+    </head>
+    <body>
+        <header>
+            <div class="header-container">
+                <a href="/"><button class="head-button static-head-button">Главная</button></a>
+                <a href="/simulator"><button class="head-button static-head-button">Симуляция</button></a>
+                <a href="/calculator"><button class="head-button push-head-button">Калькулятор</button></a>
+                <a href="/editor"><button class="head-button static-head-button">Редактор</button></a>
+<!--                <a href="/helper.html"><button class="head-button static-head-button">Справочник</button></a>-->
+                <!-- <span class="lyceum">Престиж, 2026</span> -->
+            </div>
+        </header>
+        <div class="main-container">
+            <div class="calculator-container">
+                <div class="left-column">
+                    <div class="name-container">
+                        <div class="window-name">Калькулятор ветроустойчивости деревьев</div>
+                        <div class="window-subname">Калькулятор</div>
+                    </div>
+                    <div class="calculate-container">
+                        <div class="mod-container">
+                            <button class="mod-button-container" onclick="switchContent('WindLoad')">Ветровая нагрузка</button>
+                            <button class="mod-button-container" onclick="switchContent('MechanicalStress')">Прочность ствола</button>
+                            <button class="mod-button-container" onclick="switchContent('Tipping')">Крен и опрокидывание</button>
+                        </div>
+                        <div class="work-container">
+                            <!-- Ветровая нагрузка -->
+                            <div class="content-block active-mod" id="WindLoad">
+                                <div class="calculate-name-mod">Ветровая нагрузка</div>
+                                <div class="formuls-container">
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item1" checked>
+                                        <label for="item1" class="formula-button" onclick="showFormulaInfo('WindLoadInfo')">Сила и момент ветра</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u</td>
+                                                            <td>м/c</td>
+                                                            <td><input type="text" class="input-value" id="WindLoadSpeed"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="WindLoadCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="WindLoadS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>h</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="WindLoadH"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>F<sub>в</sub></td>
+                                                            <td id="WindLoadF"></td>
+                                                            <td>Н</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>M<sub>в</sub></td>
+                                                            <td id="WindLoadM"></td>
+                                                            <td>Н·м</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    u > 0 - Скорость ветра
+                                                    <br>
+                                                    C<sub>D</sub> > 0 - коэффициент аэродинамичного сопротивления кроны
+                                                    <br>
+                                                    S > 0- площадь вертикальной проекции кроны
+                                                    <br>
+                                                    h > 0- высота дерева
+                                                    <br>
+                                                    <br>
+                                                    F<sub>в</sub> - сила ветра
+                                                    <br>
+                                                    М<sub>в</sub> - изгибающий момент
+                                                </div>
+                                                <button class="calculate-button" id="WindLoadButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Прочность ствола -->
+                            <div class="content-block deactive-mod" id="MechanicalStress">
+                                <div class="calculate-name-mod">Прочность ствола</div>
+                                <div class="formuls-container">
+                                    <!-- Напряжение в стволе -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item2">
+                                        <label for="item2" class="formula-button" onclick="showFormulaInfo('StressInfo')">Напряжение в стволе</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u</td>
+                                                            <td>м/c</td>
+                                                            <td><input type="text" class="input-value" id="StressSpeed"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="StressCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="StressS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>d</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="StressD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>σ<sub>max</sub></td>
+                                                            <td>Па</td>
+                                                            <td><input type="text" class="input-value" id="StressMax"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>σ</td>
+                                                            <td id="StressValue"></td>
+                                                            <td>Па</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>k</td>
+                                                            <td id="StressSafety"></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    u > 0 - Скорость ветра
+                                                    <br>
+                                                    C<sub>D</sub> > 0 - коэффициент сопротивления кроны
+                                                    <br>
+                                                    S > 0 - площадь проекции кроны
+                                                    <br>
+                                                    d > 0 - диаметр ствола
+                                                    <br>
+                                                    σ<sub>max</sub> > 0 - предел прочности
+                                                    <br>
+                                                    <br>
+                                                    σ - напряжение в стволе
+                                                    <br>
+                                                    k - запас прочности
+                                                </div>
+                                                <button class="calculate-button" id="StressButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Критическая скорость излома -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item3">
+                                        <label for="item3" class="formula-button" onclick="showFormulaInfo('BreakSpeedInfo')">Скорость излома</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>d</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="BreakD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="BreakCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="BreakS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>h</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="BreakH"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>σ<sub>max</sub></td>
+                                                            <td>Па</td>
+                                                            <td><input type="text" class="input-value" id="BreakMax"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u<sub>изл</sub></td>
+                                                            <td id="BreakSpeed"></td>
+                                                            <td>м/с</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    d > 0 - диаметр ствола
+                                                    <br>
+                                                    C<sub>D</sub> > 0 - коэффициент сопротивления кроны
+                                                    <br>
+                                                    S > 0- площадь проекции кроны
+                                                    <br>
+                                                    h > 0- высота дерева
+                                                    <br>
+                                                    σ<sub>max</sub> > 0 - предел прочности
+                                                    <br>
+                                                    <br>
+                                                    u<sub>изл</sub> - скорость излома
+                                                </div>
+                                                <button class="calculate-button" id="BreakButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Крен и опрокидывание -->
+                            <div class="content-block deactive-mod" id="Tipping">
+                                <div class="calculate-name-mod">Крен и опрокидывание</div>
+                                <div class="formuls-container">
+                                    <!-- Угол крена -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item4">
+                                        <label for="item4" class="formula-button" onclick="showFormulaInfo('RollAngleInfo')">Угол крена</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u</td>
+                                                            <td>м/c</td>
+                                                            <td><input type="text" class="input-value" id="RollSpeed"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="RollCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="RollS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>h</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="RollH"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>a</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="RollA"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>b</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="RollB"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Q</td>
+                                                            <td>Н</td>
+                                                            <td><input type="text" class="input-value" id="RollQ"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>l</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="RollL"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>c</td>
+                                                            <td>Па/м</td>
+                                                            <td><input type="text" class="input-value" id="RollC"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>θ</td>
+                                                            <td id="RollAngle"></td>
+                                                            <td>°</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    u > 0 - скорость ветра
+                                                    <br>
+                                                    C<sub>D</sub> > 0 - коэффициент сопротивления кроны
+                                                    <br>
+                                                    S > 0 - площадь кроны, 
+                                                    <br>
+                                                    h > 0 - высота дерева,
+                                                    <br>
+                                                    a > 0, b > 0 - размеры корневой системы
+                                                    <br>
+                                                    Q > 0- вес дерева,
+                                                    <br> 
+                                                    l > 0 - центр тяжести
+                                                    <br>
+                                                    c > 0 - жесткость грунта
+                                                    <br>
+                                                    <br>
+                                                    θ - угол крена дерева
+                                                </div>
+                                                <button class="calculate-button" id="RollButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Угол отрыва -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item5">
+                                        <label for="item5" class="formula-button" onclick="showFormulaInfo('SeparationAngleInfo')">Угол отрыва</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Q</td>
+                                                            <td>Н</td>
+                                                            <td><input type="text" class="input-value" id="SepQ"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>a</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepA"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>b</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepB"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>c</td>
+                                                            <td>Па/м</td>
+                                                            <td><input type="text" class="input-value" id="SepC"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>θ<sub>отр</sub></td>
+                                                            <td id="SepAngle"></td>
+                                                            <td>°</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    Q > 0 - вес дерева
+                                                    <br>
+                                                    a > 0, b > 0 - размеры корневой системы
+                                                    <br>
+                                                    c > 0 - жесткость грунта
+                                                    <br>
+                                                    <br>
+                                                    θотр - угол отрыва дерева
+                                                </div>
+                                                <button class="calculate-button" id="SepButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Угол опрокидывания -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item6">
+                                        <label for="item6" class="formula-button" onclick="showFormulaInfo('TippingAngleInfo')">Угол опрокидывания</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Q</td>
+                                                            <td>Н</td>
+                                                            <td><input type="text" class="input-value" id="TipQ"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>l</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipL"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>b</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipB"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>c</td>
+                                                            <td>Па/м</td>
+                                                            <td><input type="text" class="input-value" id="TipC"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>θ<sub>опр</sub></td>
+                                                            <td id="TipAngle"></td>
+                                                            <td>°</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    Q > 0 - вес дерева
+                                                    <br>
+                                                    l > 0 - высота центра тяжести
+                                                    <br>
+                                                    b > 0 - ширина корневой системы
+                                                    <br>
+                                                    c > 0 - жесткость грунта
+                                                    <br><br>
+                                                    <td>θ<sub>опр - угол опрокидывания дерева
+                                                </div>
+                                                <button class="calculate-button" id="TipButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Скорость отрыва -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item7">
+                                        <label for="item7" class="formula-button" onclick="showFormulaInfo('SepSpeedInfo')">Скорость отрыва</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Q</td>
+                                                            <td>Н</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedQ"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>a</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedA"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>b</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedB"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>l</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedL"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>h</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedH"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>c</td>
+                                                            <td>Па/м</td>
+                                                            <td><input type="text" class="input-value" id="SepSpeedC"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u<sub>отр</sub></td>
+                                                            <td id="SepSpeed"></td>
+                                                            <td>м/с</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    Q > 0 - вес дерева
+                                                    <br>
+                                                    a > 0, b > 0 - размеры корней
+                                                    <br> 
+                                                    l > 0 - центр тяжести
+                                                    <br>
+                                                    h > 0 - высота
+                                                    <br> 
+                                                    C<sub>D</sub> > 0 - коэф. сопротивления
+                                                    <br>
+                                                    S > 0 - площадь кроны
+                                                    <br> 
+                                                    c > 0- жесткость грунта
+                                                    <br><br>
+                                                    u<sub>отр</sub> - скорость ветра, при которой производет отрыв дерева
+                                                </div>
+                                                <button class="calculate-button" id="SepSpeedButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Скорость опрокидывания -->
+                                    <div class="formula-container">
+                                        <input type="radio" name="formuls-container" id="item8">
+                                        <label for="item8" class="formula-button" onclick="showFormulaInfo('TipSpeedInfo')">Скорость опрокидывания</label>
+                                        <div class="formula-content">
+                                            <div class="table-container">
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Единицы измерения</th>
+                                                            <th>Значение</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Q</td>
+                                                            <td>Н</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedQ"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>l</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedL"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>a</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedA"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>b</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedB"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>c</td>
+                                                            <td>Па/м</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedC"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>C<sub>D</sub></td>
+                                                            <td></td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedCD"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>S</td>
+                                                            <td>м<sup>2</sup></td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedS"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>h</td>
+                                                            <td>м</td>
+                                                            <td><input type="text" class="input-value" id="TipSpeedH"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <table border="1" class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Параметр</th>
+                                                            <th>Результат</th>
+                                                            <th>Единицы измерения</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>u<sub>опр</sub></td>
+                                                            <td id="TipSpeed"></td>
+                                                            <td>м/с</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="bottom-container">
+                                                <div class="info-text">
+                                                    Q > 0 - вес дерева
+                                                    <br>
+                                                    l > 0 - центр тяжести, a,b - размеры корней
+                                                    <br>
+                                                    c > 0 - жесткость грунта
+                                                    <br> 
+                                                    C<sub>D</sub> > 0 - коэф. сопротивления
+                                                    <br>
+                                                    S > 0 - площадь кроны
+                                                    <br> 
+                                                    h > 0 - высота дерева
+                                                    <br><br>
+                                                    <td>u<sub>опр</sub> - скорость опрокидывания дерева
+                                                </div>
+                                                <button class="calculate-button" id="TipSpeedButton">Рассчитать</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-container">
+                    <div class="formula-info-container">
+                        <div class="formula-info active-mod" id="WindLoadInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">F<sub>в</sub> = C<sub>D</sub> · S · ρ · u² · 0.5</span>
+                            <span class="calculation-formula">M<sub>в</sub> = h · F<sub>в</sub></span>
+                            <span class="description-formula">Позволяет рассчитать силовую нагрузку ветра на дерево и изгибающий момент в основании ствола</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="StressInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">σ = M<sub>в</sub> / W, где W = π·d³/32</span>
+                            <span class="calculation-formula">k = σ / σ<sub>max</sub></span>
+                            <span class="description-formula">Напряжение в крайних волокнах ствола и запас прочности</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="BreakSpeedInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">u<sub>изл</sub> = √( (π·d³·σ<sub>max</sub>) / (16·C<sub>D</sub>·S·ρ·h) )</span>
+                            <span class="description-formula">Скорость ветра, при которой произойдет излом ствола</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="RollAngleInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">θ = (F·h) / (c·J - Q·l), где J = a·b³/12</span>
+                            <span class="description-formula">Угол крена дерева при заданной скорости ветра</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="SeparationAngleInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">θ<sub>отр</sub> = 2Q / (c·a²·b)</span>
+                            <span class="description-formula">Угол, при котором начинается отрыв корневой системы от почвы</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="TippingAngleInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">θ<sub>опр</sub> = (Q / (18·l²·b·c))<sup>1/3</sup></span>
+                            <span class="description-formula">Предельный угол, после которого дерево опрокинется</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="SepSpeedInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">u<sub>отр</sub> = √( 2F / (C<sub>D</sub>·S·ρ) ), где F из угла отрыва</span>
+                            <span class="description-formula">Скорость ветра, при которой начинается отрыв корней</span>
+                        </div>
+                        <div class="formula-info deactive-mod" id="TipSpeedInfo">
+                            <span class="calculation-formula-title">Формула расчета:</span>
+                            <span class="calculation-formula">u<sub>опр</sub> = √( 2F / (C<sub>D</sub>·S·ρ) ), где F из угла опрокидывания</span>
+                            <span class="description-formula">Скорость ветра, при которой дерево опрокинется</span>
+                        </div>
+                    </div>
+                    <div class="console-container">
+                        <ul class="console" id="Console">
+                            <li class="console-text">Выберите формулу и произведите расчет</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </body>
+    <script src="../scripts/configs.js"></script>
+    <script src="../scripts/utils.js"></script>
+    <script>
+            function switchContent(contentId) {
+                const blocks = document.querySelectorAll('.content-block');
+                blocks.forEach(block => {
+                    block.classList.remove('active-mod');
+                    block.classList.add('deactive-mod');
+                });
+
+                const activeBlock = document.getElementById(contentId);
+                activeBlock.classList.remove('deactive-mod');
+                activeBlock.classList.add('active-mod');
+            }
+
+            function showFormulaInfo(infoId) {
+                const blocks = document.querySelectorAll('.formula-info');
+                blocks.forEach(block => {
+                    block.classList.remove('active-mod');
+                    block.classList.add('deactive-mod');
+                });
+
+                const activeBlock = document.getElementById(infoId);
+                activeBlock.classList.remove('deactive-mod');
+                activeBlock.classList.add('active-mod');
+            }
+
+        class Calculator {
+            cons = document.getElementById('Console');
+            
+            // Wind Load элементы
+            windLoadSpeed = document.getElementById('WindLoadSpeed');
+            windLoadCD = document.getElementById('WindLoadCD');
+            windLoadS = document.getElementById('WindLoadS');
+            windLoadH = document.getElementById('WindLoadH');
+            windLoadF = document.getElementById('WindLoadF');
+            windLoadM = document.getElementById('WindLoadM');
+            
+            // Stress элементы
+            stressSpeed = document.getElementById('StressSpeed');
+            stressCD = document.getElementById('StressCD');
+            stressS = document.getElementById('StressS');
+            stressD = document.getElementById('StressD');
+            stressMax = document.getElementById('StressMax');
+            stressValue = document.getElementById('StressValue');
+            stressSafety = document.getElementById('StressSafety');
+            
+            // Break элементы
+            breakD = document.getElementById('BreakD');
+            breakCD = document.getElementById('BreakCD');
+            breakS = document.getElementById('BreakS');
+            breakH = document.getElementById('BreakH');
+            breakMax = document.getElementById('BreakMax');
+            breakSpeed = document.getElementById('BreakSpeed');
+            
+            // Roll элементы
+            rollSpeed = document.getElementById('RollSpeed');
+            rollCD = document.getElementById('RollCD');
+            rollS = document.getElementById('RollS');
+            rollH = document.getElementById('RollH');
+            rollA = document.getElementById('RollA');
+            rollB = document.getElementById('RollB');
+            rollQ = document.getElementById('RollQ');
+            rollL = document.getElementById('RollL');
+            rollC = document.getElementById('RollC');
+            rollAngle = document.getElementById('RollAngle');
+            
+            // Separation элементы
+            sepQ = document.getElementById('SepQ');
+            sepA = document.getElementById('SepA');
+            sepB = document.getElementById('SepB');
+            sepC = document.getElementById('SepC');
+            sepAngle = document.getElementById('SepAngle');
+            
+            // Tipping элементы
+            tipQ = document.getElementById('TipQ');
+            tipL = document.getElementById('TipL');
+            tipB = document.getElementById('TipB');
+            tipC = document.getElementById('TipC');
+            tipAngle = document.getElementById('TipAngle');
+            
+            // Separation Speed элементы
+            sepSpeedQ = document.getElementById('SepSpeedQ');
+            sepSpeedA = document.getElementById('SepSpeedA');
+            sepSpeedB = document.getElementById('SepSpeedB');
+            sepSpeedL = document.getElementById('SepSpeedL');
+            sepSpeedH = document.getElementById('SepSpeedH');
+            sepSpeedCD = document.getElementById('SepSpeedCD');
+            sepSpeedS = document.getElementById('SepSpeedS');
+            sepSpeedC = document.getElementById('SepSpeedC');
+            sepSpeed = document.getElementById('SepSpeed');
+
+            // Tipping Speed элементы
+            tipSpeedQ = document.getElementById('TipSpeedQ');
+            tipSpeedL = document.getElementById('TipSpeedL');
+            tipSpeedA = document.getElementById('TipSpeedA');
+            tipSpeedB = document.getElementById('TipSpeedB');
+            tipSpeedC = document.getElementById('TipSpeedC');
+            tipSpeedCD = document.getElementById('TipSpeedCD');
+            tipSpeedS = document.getElementById('TipSpeedS');
+            tipSpeedH = document.getElementById('TipSpeedH');
+            tipSpeed = document.getElementById('TipSpeed');
+
+            constructor() {
+                this.clientId = sessionStorage.getItem('ClientId')
+                this.backend = new ClientApiRequests(SERVER_URL, 'calculator', this.clientId);
+            }
+
+            async calculate(url, body) {
+                const response = await this.backend.post(url, '', body);
+                
+                const status = response.status;
+                const requestStatus = status == 200 ? 1 : 0;
+                const statusText = response.statusText;
+
+                this.renderStatus(status, statusText);
+                
+                const data = await response.json();
+
+                return {status: requestStatus,
+                        data: data
+                        }
+            }
+
+            renderStatus(status, statusText) {
+                let consoleText = '';
+                let consoleState = 0; // 0 - normal 1 - error 2 - done
+                if (status == 67) {
+                    switch (statusText) {
+                        case 'DivisionByZero':
+                            consoleText = 'Результат формулы не определен, так как происходит деление на ноль';
+                            consoleState = 1;
+                            break;
+                        case 'NegativeRootExpression':
+                            consoleText = 'Результат формулы не определен, так как подкоренное выражение отрицательное'
+                            consoleState = 1;
+                            break;
+                        default:
+                            consoleText = 'Результат формулы не определен, причина неизвестна'
+                            consoleState = 1;
+                            break;
+                    }
+                }
+                else if (status == 200) {
+                    consoleText = 'Успех!';
+                    consoleState = 2;
+                }
+
+                else {
+                    consoleText = 'Незвестная ошибка: ' + statusText;
+                    consoleState = 1;
+                }
+
+                this.writeConsole(consoleText, consoleState);
+            }
+
+            renderCalculateResult(data) {
+                // data: [{'id': document.getElementById, 'value': float/int}]
+
+                for (let value of data) {
+                    value['id'].textContent = value['value'];
+                }
+            }
+
+            writeConsole(text, mod) {
+                // 0 - normal 1 - error 2 -done
+
+                if (mod == 0) {
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text">`
+                                                           +text+
+                                                          `</li>`);
+                }
+
+                else if (mod == 1) {
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-error">`
+                                        +text+
+                                        `</li>`);
+                }
+                else if (mod == 2){
+                    this.cons.insertAdjacentHTML('beforeend', `<li class="console-text-done">`
+                                        +text+
+                                        `</li>`);
+                }
+
+                this.cons.scrollTop = this.cons.scrollHeight;
+            }
+            
+            validateValues(values) {
+                // value[0] - value value[1] - name
+                let isDone = true;
+                for (let value of values){
+                    let isError = false;
+
+                    if (value[0] === undefined || 
+                        value[0] === null || 
+                        value[0].toString().trim() === '') {
+                        isError = true;
+                    } else {
+                        let floatValue = Number(value[0]);
+                        if (isNaN(floatValue)) isError = true;
+                        if (floatValue < 0) isError = true;
+                    }
+
+                    if (isError) {
+                        this.writeConsole('Некорректно введен параметр ' + value[1], 1);
+                        isDone = false;
+                    }
+                }
+
+                return isDone;
+            }
+
+            async calculateWindLoad() {
+                let u = this.windLoadSpeed.value;
+                let cd = this.windLoadCD.value;
+                let s = this.windLoadS.value;
+                let h = this.windLoadH.value;
+
+                const isDone = this.validateValues([[u,'u'], [cd, 'C<sub>D</sub>'], [s, 'S'], [h, 'h']]);
+                
+                if (isDone) {
+                    this.writeConsole('Ветровая нагрузка: данные валидны', 2);
+                    const result = await this.calculate('wind-load', {
+                        'wind_speed': u,
+                        'c_d': cd,
+                        'crown_square': s,
+                        'tree_height': h
+                    });
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.windLoadF,
+                                'value': result['data']['wind_force']
+                            },
+                            {
+                                'id': this.windLoadM,
+                                'value': result['data']['wind_moment']
+                            }
+                        ])
+                    }
+                }
+            }
+            
+            async calculateStress() {
+                let u = this.stressSpeed.value;
+                let cd = this.stressCD.value;
+                let s = this.stressS.value;
+                let d = this.stressD.value;
+                let max = this.stressMax.value;
+
+                const isDone = this.validateValues([[u,'u'], [cd, 'C<sub>D</sub>'], [s, 'S'], [d, 'd'], [max, 'σ<sub>max</sub>']]);
+                
+                if (isDone) {
+                    this.writeConsole('Напряжение в стволе: данные валидны', 2);
+                    const result = await this.calculate('mechanical-strength', {
+                        'wind_speed': u,
+                        'c_d': cd,
+                        'crown_square': s,
+                        'diameter': d,
+                        'max_strength': max
+                    })
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.stressValue,
+                                'value': result.data['mechanical_strength']
+                            },
+                            {
+                                'id': this.stressSafety,
+                                'value': result.data['safety']
+                            }
+                        ]);
+                    }
+                }
+            }
+            
+            async calculateBreak() {
+                let d = this.breakD.value;
+                let cd = this.breakCD.value;
+                let s = this.breakS.value;
+                let h = this.breakH.value;
+                let max = this.breakMax.value;
+
+                const isDone = this.validateValues([[d,'d'], [cd, 'C<sub>D</sub>'], [s, 'S'], [h, 'h'], [max, 'σ<sub>max</sub>']]);
+                
+                if (isDone) {
+                    this.writeConsole('Скорость излома: данные валидны', 2);
+                    const result = await this.calculate('break-wind-speed', {
+                        'diameter': d,
+                        'c_d': cd,
+                        'crown_square': s,
+                        'tree_height': h,
+                        'max_strength': max
+                    });
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.breakSpeed,
+                                'value': result.data['wind_speed']
+                            }
+                        ])
+                    }
+                }
+            }
+            
+            async calculateRoll() {
+                let u = this.rollSpeed.value;
+                let cd = this.rollCD.value;
+                let s = this.rollS.value;
+                let h = this.rollH.value;
+                let a = this.rollA.value;
+                let b = this.rollB.value;
+                let q = this.rollQ.value;
+                let l = this.rollL.value;
+                let c = this.rollC.value;
+
+                const isDone = this.validateValues([[u,'u'], [cd, 'C<sub>D</sub>'], [s, 'S'], [h, 'h'], [a, 'a'], [b, 'b'], [q, 'Q'], [l, 'l'], [c, 'c']]);
+                
+                if (isDone) {
+                    this.writeConsole('Угол крена: данные валидны', 2);
+
+                    const result = await this.calculate('roll-angle', {
+                        'wind_speed': u,
+                        'soil_c': c,
+                        'c_d': cd,
+                        'a': a,
+                        'b': b,
+                        'crown_square': s,
+                        'tree_weight': q,
+                        'center_gravity_height': l,
+                        'tree_height': h
+                    })
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.rollAngle,
+                                'value': result.data['angle']
+                            }
+                        ])
+                    }
+                }
+            }
+            
+            async calculateSeparationAngle() {
+                let q = this.sepQ.value;
+                let a = this.sepA.value;
+                let b = this.sepB.value;
+                let c = this.sepC.value;
+
+                const isDone = this.validateValues([[q,'Q'], [a, 'a'], [b, 'b'], [c, 'c']]);
+                
+                if (isDone) {
+                    this.writeConsole('Угол отрыва: данные валидны', 2);
+                    const result = await this.calculate('separation-angle', {
+                        'soil_c': c,
+                        'tree_weight': q,
+                        'a': a,
+                        'b': b
+                    });
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.sepAngle,
+                                'value': result.data['angle']
+                            }
+                        ])
+                    }
+                }
+            }
+            
+            async calculateTippingAngle() {
+                let q = this.tipQ.value;
+                let l = this.tipL.value;
+                let b = this.tipB.value;
+                let c = this.tipC.value;
+
+                const isDone = this.validateValues([[q,'Q'], [l, 'l'], [b, 'b'], [c, 'c']]);
+                
+                if (isDone) {
+                    this.writeConsole('Угол опрокидывания: данные валидны', 2);
+                    const result = await this.calculate('tipping-angle', {
+                        'soil_c': c,
+                        'tree_weight': q, 
+                        'center_gravity_height': l,
+                        'b': b
+                    });
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.tipAngle,
+                                'value': result.data['angle']
+                            }
+                        ]);
+                    }
+                }
+            }
+            
+            async calculateSeparationSpeed() {
+                let q = this.sepSpeedQ.value;
+                let a = this.sepSpeedA.value;
+                let b = this.sepSpeedB.value;
+                let l = this.sepSpeedL.value;
+                let h = this.sepSpeedH.value;
+                let cd = this.sepSpeedCD.value;
+                let s = this.sepSpeedS.value;
+                let c = this.sepSpeedC.value;
+
+                const isDone = this.validateValues([[q,'Q'], [a, 'a'], [b, 'b'], [l, 'l'], [h, 'h'], [cd, 'C<sub>D</sub>'], [s, 'S'], [c, 'c']]);
+                
+                if (isDone) {
+                    this.writeConsole('Скорость отрыва: данные валидны', 2);
+                    const result = await this.calculate('separation-wind-speed', {
+                        'tree_weight': q,
+                        'soil_c': c,
+                        'a': a,
+                        'b': b,
+                        'center_gravity_height': l,
+                        'tree_height': h,
+                        'c_d': cd,
+                        'crown_square': s
+                    }); 
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.sepSpeed,
+                                'value': result.data['wind_speed']
+                            }
+                        ]);
+                    }
+                }
+            }
+            
+            async calculateTippingSpeed() {
+                let q = this.tipSpeedQ.value;
+                let l = this.tipSpeedL.value;
+                let a = this.tipSpeedA.value;
+                let b = this.tipSpeedB.value;
+                let c = this.tipSpeedC.value;
+                let cd = this.tipSpeedCD.value;
+                let s = this.tipSpeedS.value;
+                let h = this.tipSpeedH.value;
+
+                const isDone = this.validateValues([
+                    [q, 'Q'], [l, 'l'], [a, 'a'], [b, 'b'], 
+                    [c, 'c'], [cd, 'C<sub>D</sub>'], [s, 'S'], [h, 'h']
+                ]);
+                
+                if (isDone) {
+                    this.writeConsole('Скорость опрокидывания: данные валидны', 2);
+                    const result = await this.calculate('tipping-wind-speed', {
+                        'soil_c': c,
+                        'tree_weight': q,
+                        'center_gravity_height': l,
+                        'a': a,
+                        'b': b,
+                        'c_d': cd,
+                        'crown_square': s,
+                        'tree_height': h
+                    });
+
+                    if (result.status == 1) {
+                        this.renderCalculateResult([
+                            {
+                                'id': this.tipSpeed,
+                                'value': result.data['wind_speed']
+                            }
+                        ])
+                    }
+                }
+            }
+
+        }
+
+        const calculator = new Calculator();
+
+        // Кнопки
+        document.getElementById('WindLoadButton').onclick = () => calculator.calculateWindLoad();
+        document.getElementById('StressButton').onclick = () => calculator.calculateStress();
+        document.getElementById('BreakButton').onclick = () => calculator.calculateBreak();
+        document.getElementById('RollButton').onclick = () => calculator.calculateRoll();
+        document.getElementById('SepButton').onclick = () => calculator.calculateSeparationAngle();
+        document.getElementById('TipButton').onclick = () => calculator.calculateTippingAngle();
+        document.getElementById('SepSpeedButton').onclick = () => calculator.calculateSeparationSpeed();
+        document.getElementById('TipSpeedButton').onclick = () => calculator.calculateTippingSpeed();
+    </script>
+</html>
