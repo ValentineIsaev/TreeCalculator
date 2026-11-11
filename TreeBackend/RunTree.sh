@@ -2,9 +2,10 @@
 
 echo RUN
 
-source .TreeVenv/bin/activate
+source treebase/.venv/bin/activate
 
 cd treebase
-export PYTHONPATH=/home/inqusitor/TreeProdaction/TreeBase
+export PYTHONPATH=export PYTHONPATH="$(pwd)/.."
 
 python3 bind.py
+
