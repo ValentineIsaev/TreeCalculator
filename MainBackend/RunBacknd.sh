@@ -1,8 +1,11 @@
 #!/bin/bash
 
-source .BackendVenv/bin/activate
+echo RUN
 
-cd backend
-export PYTHONPATH=/home/inqusitor/TreeProdaction/Backend
+source treebase/.venv/bin/activate
+
+cd treebase
+export PYTHONPATH=export PYTHONPATH="$(pwd)/.."
 
 python3 bind.py
+
